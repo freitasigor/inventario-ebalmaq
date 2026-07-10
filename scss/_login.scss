@@ -1,0 +1,28 @@
+#login-screen {
+    position: fixed; top: 0; left: 0; width: 100%; 
+    height: 100vh; height: 100dvh; 
+    background: linear-gradient(135deg, $primary-dark 0%, $primary-color 100%);
+    display: flex; align-items: center; justify-content: center; z-index: 9999;
+}
+.login-box {
+    background: #fff; padding: 2rem; border-radius: 16px; width: 90%; max-width: 360px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3); text-align: center;
+    
+    i.fa-microchip { font-size: 2.5rem; color: $primary-color; margin-bottom: 10px; }
+    h2 { margin: 0 0 5px 0; color: $primary-dark; font-size: 1.4rem;}
+    p { color: $text-muted; font-size: 0.8rem; margin-bottom: 20px; }
+}
+.login-input {
+    width: 100%; padding: 10px 12px; margin-bottom: 15px; border: 2px solid #e2e8f0;
+    border-radius: 8px; font-size: 0.9rem; font-family: inherit; transition: all 0.3s ease;
+    
+    &:focus { border-color: $primary-light; box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15); }
+}
+.login-btn {
+    width: 100%; background: $primary-color; color: white; padding: 10px; font-size: 0.9rem;
+    border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+    
+    &:hover { background: $primary-dark; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(21, 128, 61, 0.3); }
+    &:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; }
+}
+#app-screen { display: none; flex-direction: column; flex: 1; overflow: hidden; }

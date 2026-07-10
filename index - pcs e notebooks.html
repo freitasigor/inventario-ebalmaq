@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Inventário Ebalmaq - Conferência</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- ESTRUTURA BLINDADA DO HEADER (DESKTOP) E CORREÇÕES -->
+    <style id="custom-injected-styles">
+        .main-header { display: flex; align-items: center; justify-content: space-between; gap: 15px; height: auto !important; min-height: fit-content !important; padding: 15px; flex-wrap: wrap; }
+        .header-right-panel { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+        
+        .mobile-row-1 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        
+        .user-info { color: #475569; font-weight: 600; display: flex; align-items: center; gap: 5px; margin: 0 !important; width: auto !important; }
+        .btn-sair-mobile { display: none !important; }
+        
+        .btn-sair-desk { background: #ef4444 !important; border-color: #dc2626 !important; color: #fff !important; }
+        .btn-sair-desk:hover { background: #dc2626 !important; }
+
+        @media (max-width: 768px) {
+            .main-header { flex-direction: column; align-items: center !important; gap: 12px; padding: 15px 10px !important; }
+            .header-title { width: 100%; justify-content: center; text-align: center; }
+            .header-right-panel { flex-direction: column; width: 100%; gap: 10px; align-items: center; }
+            
+            .mobile-row-1 { justify-content: center; width: 100%; gap: 15px; flex-wrap: nowrap; }
+            .btn-sair-desk { display: none !important; }
+            .btn-sair-mobile { display: flex !important; background: transparent; border: none; color: #ef4444; font-weight: 600; align-items: center; gap: 5px; font-size: 0.95rem; cursor: pointer; padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast-container"></div>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <i class="fas fa-microchip"></i>
+            <h2>Ebalmaq</h2>
+            <p>Acesso Restrito - Conferência</p>
+            <form id="form-login" onsubmit="fazerLogin(event)">
+                <input type="text" id="login-user" class="login-input" placeholder="Usuário da Rede" required autocomplete="username">
+                <input type="password" id="login-pass" class="login-input" placeholder="Senha" required autocomplete="current-password">
+                <button type="submit" id="btn-entrar" class="login-btn">Entrar no Sistema</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="app-screen">
+        <div class="container">
+            <div id="stickyTop">
+                
+                <div class="main-header">
+                    
+                    <div class="header-title" style="flex-shrink: 0;">
+                        <i class="fas fa-microchip"></i>
+                        <span id="main-title-text" style="font-weight: 600;">Ebalmaq - Conferência</span>
+                    </div>
+
+                    <div class="header-right-panel">
+                        <div class="mobile-row-1">
+                            <div class="user-info">
+                                <i class="fas fa-user-circle"></i> <span id="display-user">Usuário</span>
+                            </div>
+
+                            <button class="btn-sair-mobile" onclick="fazerLogout()" title="Sair">
+                                <i class="fas fa-sign-out-alt"></i> Sair
+                            </button>
+
+                            <button class="btn-add-novo btn-sair-desk" onclick="fazerLogout()" title="Sair">
+                                <i class="fas fa-sign-out-alt"></i> <span>Sair</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-cards-wrapper" id="painel-estatisticas">
+                    <div id="statCardsContainer" class="stat-cards"></div>
+                </div>
+
+                <div class="controls-wrapper" id="painel-filtros">
+                    <div class="controls-container">
+                        <div class="filtros">
+                            <div class="filtro-group">
+                                <label>Marca</label><select id="marcaSelect"></select>
+                            </div>
+                            <div class="filtro-group">
+                                <label>Tipo Equip.</label><select id="tipoSelect"></select>
+                            </div>
+                            <div class="filtro-group">
+                                <label>Busca</label>
+                                <div style="display: flex; gap: 5px;">
+                                    <input type="text" id="searchInput" placeholder="Patrimônio, Modelo, Sala..." />
+                                    <button class="btn-save-pat" style="background: var(--text-muted); width: 34px; height: 34px; border-radius: 8px;" onclick="limparFiltros()" title="Limpar todos os filtros">
+                                        <i class="fas fa-eraser"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <div class="table-container" id="container-ativos">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="20%" onclick="ordenarTabela('local')" title="Ordenar por Local">Local <i class="fas fa-sort sort-icon" id="sort-icon-local"></i></th>
+                                <th width="35%" onclick="ordenarTabela('pc')" title="Ordenar por Computadores">Computador(es) <i class="fas fa-sort sort-icon" id="sort-icon-pc"></i></th>
+                                <th width="30%" onclick="ordenarTabela('notebook')" title="Ordenar por Notebooks">Notebook(s) <i class="fas fa-sort sort-icon" id="sort-icon-notebook"></i></th>
+                                <th width="15%" onclick="ordenarTabela('obs')" title="Ordenar por Observação">Obs. <i class="fas fa-sort sort-icon" id="sort-icon-obs"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventarioTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // ==============================================================
+    // 🛡️ SISTEMA DE PROTEÇÃO (XSS E INJEÇÃO HTML)
+    // ==============================================================
+    function escapeHTML(str) {
+        if (typeof str !== 'string') return str;
+        return str.replace(/[&<>'"]/g, 
+            tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag])
+        );
+    }
+
+    let dadosAPI = []; 
+    let dadosAtuais = []; 
+    let filtroCardAtivo = null;
+    let ordemAtual = { coluna: 'local', asc: true };
+
+    const inputs = {
+        marca: document.getElementById("marcaSelect"), 
+        tipo: document.getElementById("tipoSelect"),
+        search: document.getElementById("searchInput")
+    };
+
+    const hierarquiaLocais = {
+        "TÉRREO": ["Portaria", "Protocolo", "Copa", "Auditório"],
+        "7º ANDAR": ["Biblioteca", "CPRACES"],
+        "8º ANDAR": ["ESPGE"],
+        "9º ANDAR": ["GIN", "Almoxarifado", "UNIGE"],
+        "10º ANDAR": ["PFI", "PPETRO", "Dívida Ativa", "NTT", "GCI", "Protocolo", "DETRAN"],
+        "11º ANDAR": ["PCJ", "PSA"],
+        "12º ANDAR": ["PCA", "PPE", "PTR", "PEP", "GFS / GPO", "GCP"],
+        "13º ANDAR": ["Corregedoria", "CEI", "GPGE", "Comunicação", "Gabinete", "GARH", "Setor de contratos", "GEAD", "Gerência Geral"]
+    };
+
+    // ==============================================================
+    // 🔐 SISTEMA DE TOKEN SEGURO NO CLIENTE
+    // ==============================================================
+    function getToken() { return localStorage.getItem('ebalmaq_token'); }
+
+    async function apiFetch(endpoint, opcoes = {}) {
+        const token = getToken();
+        if (!opcoes.headers) opcoes.headers = {};
+        if (token) opcoes.headers['Authorization'] = `Bearer ${token}`;
+        
+        const res = await fetch(endpoint, opcoes);
+        
+        if (res.status === 401) {
+            localStorage.removeItem('ebalmaq_token');
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('app-screen').style.display = 'none';
+            throw new Error("Sessão Expirada");
+        }
+        return res;
+    }
+
+    window.onload = async () => {
+        if (!getToken()) {
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('app-screen').style.display = 'none';
+            return;
+        }
+        iniciarSistema();
+    };
+
+    async function fazerLogin(e) {
+        e.preventDefault();
+        const user = document.getElementById('login-user').value;
+        const pass = document.getElementById('login-pass').value;
+        const btn = document.getElementById('btn-entrar');
+        
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Autenticando...';
+        btn.disabled = true;
+
+        try {
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usuario: user, senha: pass })
+            });
+
+            const data = await res.json();
+            
+            if (res.ok && data.sucesso) {
+                localStorage.setItem('ebalmaq_token', data.token);
+                document.getElementById('form-login').reset();
+                iniciarSistema();
+            } else {
+                mostrarNotificacao(data.erro || 'Falha na autenticação', 'error');
+            }
+        } catch (error) {
+            mostrarNotificacao("Servidor offline ou rede indisponível.", "error");
+        } finally {
+            btn.innerHTML = 'Entrar no Sistema';
+            btn.disabled = false;
+        }
+    }
+
+    function fazerLogout() {
+        apiFetch('/api/logout', { method: 'POST' }).finally(() => {
+            localStorage.removeItem('ebalmaq_token');
+            window.location.reload(); 
+        });
+    }
+
+    async function iniciarSistema() {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app-screen').style.display = 'flex';
+
+        try {
+            const res = await apiFetch('/api/me');
+            if (res.ok) {
+                const data = await res.json();
+                document.getElementById('display-user').innerText = escapeHTML(data.nome || data.usuario);
+            }
+            await carregarDadosDaAPI();
+        } catch (error) { console.error(error); }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        Object.keys(inputs).forEach(key => {
+            const el = inputs[key];
+            if (el) {
+                el.addEventListener(el.tagName === 'INPUT' ? 'input' : 'change', () => {
+                    if (key === 'tipo') {
+                        filtroCardAtivo = inputs.tipo.value ? (inputs.tipo.value.charAt(0).toUpperCase() + inputs.tipo.value.slice(1)) : null;
+                    }
+                    populaFiltrosBaseadosEmDados();
+                    atualizarTabela();
+                });
+            }
+        });
+
+        const wrapperFiltros = document.querySelector('.controls-wrapper');
+        const wrapperTabela = document.querySelector('.table-wrapper');
+
+        if (wrapperFiltros && wrapperTabela) {
+            let isScrollingFiltros = false;
+            let isScrollingTabela = false;
+
+            wrapperFiltros.addEventListener('scroll', () => {
+                if (!isScrollingTabela) {
+                    isScrollingFiltros = true;
+                    wrapperTabela.scrollLeft = wrapperFiltros.scrollLeft;
+                    isScrollingFiltros = false;
+                }
+            });
+
+            wrapperTabela.addEventListener('scroll', () => {
+                if (!isScrollingFiltros) {
+                    isScrollingTabela = true;
+                    wrapperFiltros.scrollLeft = wrapperTabela.scrollLeft;
+                    isScrollingTabela = false;
+                }
+            });
+        }
+    });
+
+    function limparFiltros() {
+        Object.keys(inputs).forEach(key => { if(inputs[key]) inputs[key].value = ""; });
+        filtroCardAtivo = null;
+        populaFiltrosBaseadosEmDados();
+        atualizarTabela();
+    }
+
+    function mostrarNotificacao(mensagem, tipo = 'info') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${tipo}`;
+        let cor = 'var(--primary-color)', icone = 'fa-info-circle';
+        
+        if (tipo === 'success') { cor = 'var(--success-color)'; icone = 'fa-check-circle'; }
+        if (tipo === 'error') { cor = 'var(--error-color)'; icone = 'fa-exclamation-circle'; }
+        if (tipo === 'warning') { cor = 'var(--warning-color)'; icone = 'fa-exclamation-triangle'; }
+
+        toast.style.borderLeftColor = cor;
+        toast.innerHTML = `<i class="fas ${icone}" style="color: ${cor}; font-size: 1.3rem;"></i> <span style="color: var(--text-main);">${escapeHTML(mensagem)}</span>`;
+        
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.add('show'), 10);
+        setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 4000);
+    }
+
+    async function carregarDadosDaAPI() {
+        try {
+            const resposta = await apiFetch('/api/inventario');
+            
+            if (!resposta.ok) {
+                const erroData = await resposta.json();
+                mostrarNotificacao(erroData.erro || "Erro ao ler banco de dados.", "error");
+                dadosAPI = [];
+                dadosAtuais = [];
+                renderizar([], null, null, null, "");
+                return;
+            }
+
+            dadosAPI = await resposta.json();
+            if (!Array.isArray(dadosAPI)) dadosAPI = [];
+
+            dadosAtuais = [...dadosAPI];
+            populaFiltrosBaseadosEmDados();
+            atualizarTabela();
+        } catch (erro) { console.error("Falha ao carregar dados", erro); }
+    }
+
+    // IGNORA CÂMERAS, IMPRESSORAS, MONITORES, TVS NO FILTRO E NA LÓGICA
+    function equipamentoPassaFiltro(eq, d, fTipo, fMarca, fCard, termo) {
+        if (!eq.modelo || eq.modelo === 'NÃO') return false;
+
+        let prefixo = eq.posicao.replace(/[0-9_]/g, '');
+        if (prefixo !== 'pc' && prefixo !== 'notebook') return false; 
+
+        let typeStr = prefixo === 'pc' ? 'computador' : 'notebook';
+
+        if (fTipo && fTipo !== typeStr) return false;
+        if (fCard && fCard.toLowerCase() !== typeStr.toLowerCase()) return false;
+        if (fMarca && !eq.modelo.toLowerCase().includes(fMarca)) return false;
+
+        if (termo) {
+            const estacaoStr = `${d.sala || ''} ${d.setor || ''} ${d.andar || ''} ${d.observacao || ''}`.toLowerCase();
+            const eqStr = `${eq.modelo || ''} ${eq.patrimonio || ''}`.toLowerCase();
+            if (!estacaoStr.includes(termo) && !eqStr.includes(termo)) return false;
+        }
+
+        return true;
+    }
+
+    function toggleFiltroCard(label) {
+        if (filtroCardAtivo === label) { filtroCardAtivo = null; inputs.tipo.value = ""; } 
+        else { filtroCardAtivo = label; inputs.tipo.value = label.toLowerCase(); }
+        populaFiltrosBaseadosEmDados(); atualizarTabela(); 
+    }
+
+    function formatTextQtd(label, qtd) {
+        let l = qtd === 1 ? label.toLowerCase() : label.toLowerCase() + 's';
+        return `${qtd} ${l}`;
+    }
+
+    function atualizarSelectOrdenado(campo, conjunto) {
+        const valorAtual = campo.value;
+        campo.innerHTML = '<option value="">Todos</option>';
+        Array.from(conjunto).sort((a, b) => a.toString().localeCompare(b.toString(), undefined, { numeric: true, sensitivity: 'base' }))
+             .forEach(item => campo.add(new Option(escapeHTML(item), escapeHTML(item))));
+        campo.value = valorAtual;
+    }
+
+    function populaFiltrosBaseadosEmDados() {
+        let marcas = new Set(), tiposDisponiveis = new Set();
+        
+        const fMarca = inputs.marca.value.toLowerCase();
+        const fTipo = inputs.tipo.value.toLowerCase();
+        const fCard = filtroCardAtivo ? filtroCardAtivo.toLowerCase() : null;
+        const termo = inputs.search.value.toLowerCase();
+
+        dadosAPI.forEach(d => {
+            const todos = d.todos_equipamentos || [];
+            todos.forEach(eq => {
+                if (!eq.modelo || eq.modelo === 'NÃO') return;
+                
+                let prefixo = eq.posicao.replace(/[0-9_]/g, '');
+                if (prefixo !== 'pc' && prefixo !== 'notebook') return;
+                let nomeTipo = prefixo === 'pc' ? 'computador' : 'notebook';
+                
+                const passaTipo = !fTipo || nomeTipo === fTipo;
+                const passaCard = !fCard || nomeTipo === fCard;
+                const passaMarca = !fMarca || eq.modelo.toLowerCase().includes(fMarca);
+                
+                let passaTermo = true;
+                if (termo) {
+                    const estacaoStr = `${d.sala || ''} ${d.setor || ''} ${d.andar || ''} ${d.observacao || ''}`.toLowerCase();
+                    const eqStr = `${eq.modelo || ''} ${eq.patrimonio || ''}`.toLowerCase();
+                    if (!estacaoStr.includes(termo) && !eqStr.includes(termo)) passaTermo = false;
+                }
+
+                if (passaTermo) {
+                    if (passaTipo && passaCard) {
+                        marcas.add(eq.modelo.split(' ')[0].toUpperCase());
+                    }
+                    if (passaMarca && (!fCard || nomeTipo === fCard)) {
+                        tiposDisponiveis.add(nomeTipo);
+                    }
+                }
+            });
+        });
+
+        atualizarSelectOrdenado(inputs.marca, marcas);
+        
+        const valorTipoAnterior = inputs.tipo.value;
+        inputs.tipo.innerHTML = '<option value="">Todos</option>';
+        Array.from(tiposDisponiveis).sort().forEach(t => inputs.tipo.add(new Option(escapeHTML(t.charAt(0).toUpperCase() + t.slice(1)), escapeHTML(t))));
+        inputs.tipo.value = valorTipoAnterior;
+    }
+
+    function getSortValue(d, col) {
+        if (col === 'local') return `${d.andar} ${d.setor} ${d.sala}`.toLowerCase();
+        if (col === 'obs') return (d.observacao || '').toLowerCase();
+
+        const todos = d.todos_equipamentos || [];
+        let prefixos = [];
+        if (col === 'pc') prefixos = ['pc'];
+        else if (col === 'notebook') prefixos = ['notebook'];
+
+        const itens = todos.filter(e => prefixos.some(p => e.posicao.startsWith(p)) && e.modelo && e.modelo !== 'NÃO');
+        if (itens.length === 0) return '';
+        return itens.map(e => e.modelo).join(' ').toLowerCase();
+    }
+
+    function ordenarTabela(coluna) {
+        if (ordemAtual.coluna === coluna) {
+            ordemAtual.asc = !ordemAtual.asc;
+        } else {
+            ordemAtual.coluna = coluna;
+            ordemAtual.asc = true;
+        }
+        
+        document.querySelectorAll('.sort-icon').forEach(icon => {
+            icon.classList.remove('sort-active', 'sort-asc');
+        });
+        
+        const iconAtivo = document.getElementById(`sort-icon-${coluna}`);
+        if (iconAtivo) {
+            iconAtivo.classList.add('sort-active');
+            if (!ordemAtual.asc) iconAtivo.classList.add('sort-asc');
+        }
+
+        atualizarTabela();
+    }
+
+    function atualizarTabela() {
+        const termo = inputs.search.value.toLowerCase();
+        const fMarca = inputs.marca.value.toLowerCase();
+        const fTipo = inputs.tipo.value.toLowerCase();
+        const fCard = filtroCardAtivo ? filtroCardAtivo.toLowerCase() : null;
+
+        dadosAtuais = dadosAPI.filter(d => {
+            const todos = d.todos_equipamentos || [];
+            
+            let hasMatchingEquip = false;
+            for (let eq of todos) {
+                if (equipamentoPassaFiltro(eq, d, fTipo, fMarca, fCard, termo)) {
+                    hasMatchingEquip = true;
+                    break;
+                }
+            }
+            
+            if ((fMarca || fTipo || fCard || termo) && !hasMatchingEquip) {
+                if (termo && !fMarca && !fTipo && !fCard) {
+                     const estacaoStr = `${d.sala || ''} ${d.setor || ''} ${d.andar || ''} ${d.observacao || ''}`.toLowerCase();
+                     if (estacaoStr.includes(termo)) return true;
+                }
+                return false;
+            }
+
+            return true;
+        });
+
+        dadosAtuais.sort((a, b) => {
+            if (ordemAtual.coluna === 'local') {
+                const andares = Object.keys(hierarquiaLocais);
+                const idxA = andares.indexOf(a.andar);
+                const idxB = andares.indexOf(b.andar);
+                const cmpAndar = idxA !== idxB ? (idxA - idxB) : 0;
+                
+                if (cmpAndar !== 0) return ordemAtual.asc ? cmpAndar : -cmpAndar;
+
+                const cmpSetor = (a.setor || '').localeCompare(b.setor || '');
+                if (cmpSetor !== 0) return ordemAtual.asc ? cmpSetor : -cmpSetor;
+
+                const numA = parseInt((a.sala || '').match(/\d+/) || [0], 10);
+                const numB = parseInt((b.sala || '').match(/\d+/) || [0], 10);
+                return ordemAtual.asc ? (numA - numB) : (numB - numA);
+            } else {
+                const valA = getSortValue(a, ordemAtual.coluna);
+                const valB = getSortValue(b, ordemAtual.coluna);
+                if (valA < valB) return ordemAtual.asc ? -1 : 1;
+                if (valA > valB) return ordemAtual.asc ? 1 : -1;
+                return 0;
+            }
+        });
+
+        atualizarCards(dadosAtuais, fTipo, fMarca, fCard, termo);
+        renderizar(dadosAtuais, fTipo, fMarca, fCard, termo);
+    }
+
+    // CARDS: APENAS PC E NOTEBOOK
+    function atualizarCards(lista, fTipo, fMarca, fCard, termo) {
+        const container = document.getElementById("statCardsContainer");
+        const counts = { Computador: 0, Notebook: 0 };
+        const icons = { Computador: 'fa-desktop', Notebook: 'fa-laptop' };
+
+        lista.forEach(d => {
+            const todos = d.todos_equipamentos || [];
+            todos.forEach(eq => {
+                if (equipamentoPassaFiltro(eq, d, fTipo, fMarca, fCard, termo)) {
+                    if (eq.posicao.startsWith('pc')) counts.Computador++;
+                    else if (eq.posicao.startsWith('notebook')) counts.Notebook++;
+                }
+            });
+        });
+
+        container.innerHTML = '';
+        ['Computador', 'Notebook'].forEach(label => {
+            const total = counts[label];
+            const isActive = filtroCardAtivo === label;
+            const isDisabled = (total === 0 && !isActive);
+            
+            let nomeExibicao = formatTextQtd(label, total).replace(/[0-9]/g, '').trim(); 
+            nomeExibicao = nomeExibicao.charAt(0).toUpperCase() + nomeExibicao.slice(1);
+            if (total === 0) nomeExibicao = label + 's';
+
+            container.innerHTML += `
+                <div class="stat-card ${isActive ? 'active' : ''} ${isDisabled ? 'disabled' : ''}" ${isDisabled ? '' : `onclick="toggleFiltroCard('${label}')"`}>
+                    <div class="stat-icon"><i class="fas ${icons[label]}"></i></div>
+                    <div class="stat-info"><h3>${total}</h3></div>
+                    <p style="font-size: 0.75rem; margin: 0; color: var(--text-muted); font-weight: 700; text-transform: uppercase; word-break: break-word; width: 100%; text-align: left;">${nomeExibicao}</p>
+                </div>`;
+        });
+    }
+
+    function renderizar(lista, fTipo, fMarca, fCard, termo) {
+        const tbody = document.getElementById("inventarioTable");
+        tbody.innerHTML = '';
+        
+        lista.forEach(d => {
+            const tr = document.createElement('tr');
+            const todos = d.todos_equipamentos || [];
+            
+            const renderCell = (prefixos, defaultIcon) => {
+                const itens = todos.filter(e => prefixos.some(p => e.posicao.startsWith(p)) && e.modelo && e.modelo !== 'NÃO' && equipamentoPassaFiltro(e, d, fTipo, fMarca, fCard, termo));
+                
+                if (itens.length === 0) return `<span class="vazio-dash" style="color:#cbd5e1">--</span>`;
+                return itens.map(eq => {
+                    const safePat = escapeHTML(eq.patrimonio);
+                    const safeModelo = escapeHTML(eq.modelo);
+                    const badge = (eq.patrimonio && eq.patrimonio !== "0" && !eq.patrimonio.startsWith('0_temp')) ? `<span class="patrimonio-badge">${safePat}</span>` : `<span class="patrimonio-missing">PENDENTE</span>`;
+                    return `<div style="margin-bottom:6px;"><div class="asset-name"><i class="fas ${defaultIcon} asset-icon"></i> ${safeModelo}</div>${badge}</div>`;
+                }).join('');
+            };
+
+            const pcCell = renderCell(['pc'], 'fa-desktop');
+            const noteCell = renderCell(['notebook'], 'fa-laptop');
+            const obsContent = d.observacao ? escapeHTML(d.observacao) : '<span class="vazio-dash" style="color:#cbd5e1">--</span>';
+
+            tr.innerHTML = `
+                <td class="td-local">
+                    <span class="setor-tag">${escapeHTML(d.setor)}</span>
+                    <span class="andar-tag">${escapeHTML(d.andar)} - ${escapeHTML(d.sala)}</span>
+                </td>
+                <td class="${pcCell.includes('--') ? 'td-mobile-empty' : ''}"><div class="mobile-label">Computador(es)</div>${pcCell}</td>
+                <td class="${noteCell.includes('--') ? 'td-mobile-empty' : ''}"><div class="mobile-label">Notebook(s)</div>${noteCell}</td>
+                <td class="${obsContent.includes('--') ? 'td-mobile-empty' : ''}"><div class="mobile-label">Observações</div><div style="font-size:0.85rem; color:#64748b;">${obsContent}</div></td>
+            `;
+            // Modal de clique foi removido conforme solicitado (tr.onclick retirado)
+            tbody.appendChild(tr);
+        });
+    }
+</script>
+</body>
+</html>

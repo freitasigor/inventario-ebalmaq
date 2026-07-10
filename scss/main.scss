@@ -1,0 +1,10 @@
+// 1. Carrega as suas variáveis e customizações primeiro
+@import 'variables';
+
+// 2. Injeta o Bootstrap nativo direto da node_modules (Padrão de Mercado)
+@import '../node_modules/bootstrap/scss/bootstrap';
+
+// 3. Carrega os módulos específicos da sua aplicação
+@import 'login';
+@import 'dashboard';
+@import 'modals';

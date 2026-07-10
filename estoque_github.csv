@@ -1,0 +1,9 @@
+Sala;Equipamento;Tipo de equipamento;Quantidade;Observação
+CPD Teste;HP;Notebook;123;
+CPD Teste;Dell;Notebook;123;
+ESTOQUE Teste;Lenovo - 24;Monitor;123;
+ESTOQUE Teste;Positivo - 23;Monitor;123;
+ESTOQUE Teste;"LG - 34""";Monitor;123;
+ESTOQUE Teste;"Dell - 23""";Monitor;123;
+ESTOQUE Teste;Lenovo;Computador;123;
+ESTOQUE Teste;Positivo;Computador;123;

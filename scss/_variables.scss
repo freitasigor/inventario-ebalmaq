@@ -1,0 +1,35 @@
+// 1. Overrides obrigatórios do Bootstrap 5
+$primary: #15803d;
+$success: #10b981;
+$warning: #f59e0b;
+$danger: #ef4444;
+
+// 2. Mapeamento das suas variáveis nativas originais
+$primary-color: #15803d; 
+$primary-dark: #14532d;  
+$primary-light: #22c55e; 
+$bg-color: #f2f6fa;
+$card-bg: #ffffff;
+$text-main: #334155;
+$text-muted: #64748b;
+$border-radius: 12px; 
+$shadow-soft: 0 4px 15px rgba(21, 128, 61, 0.08);
+$success-color: #10b981;
+$warning-color: #f59e0b;
+$error-color: #ef4444;
+
+// 3. Mantém a compatibilidade total com estilos injetados via JavaScript/HTML
+:root {
+    --primary-color: #15803d; 
+    --primary-dark: #14532d;  
+    --primary-light: #22c55e; 
+    --bg-color: #f2f6fa;
+    --card-bg: #ffffff;
+    --text-main: #334155;
+    --text-muted: #64748b;
+    --border-radius: 12px; 
+    --shadow-soft: 0 4px 15px rgba(21, 128, 61, 0.08);
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --error-color: #ef4444;
+}

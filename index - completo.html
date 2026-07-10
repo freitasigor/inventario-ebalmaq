@@ -1,0 +1,2045 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Inventário Ebalmaq</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    
+    <!-- 🚀 ESTILOS INJETADOS: MODO ESCURO E BLINDAGEM ANTI-BOTÃO FLUTUANTE -->
+    <style id="custom-injected-styles">
+        /* --- MODO ESCURO ABSOLUTO --- */
+        body.dark-theme { background-color: #0f172a; color: #f8fafc; }
+        body.dark-theme .container, body.dark-theme .modal-content, body.dark-theme .login-box { background-color: #1e293b; border-color: #334155; }
+        body.dark-theme .main-header, body.dark-theme .table-container, body.dark-theme .stat-card, body.dark-theme .controls-container { background-color: #1e293b; border-color: #334155; }
+        
+        body.dark-theme label, body.dark-theme .item-name, body.dark-theme .def-model-text, 
+        body.dark-theme .estoque-model-text, body.dark-theme h2, body.dark-theme h3, 
+        body.dark-theme .mobile-label, body.dark-theme .timeline-content, body.dark-theme .timeline-date,
+        body.dark-theme .stat-info p, body.dark-theme th, body.dark-theme td, body.dark-theme .asset-name, 
+        body.dark-theme .header-title span, body.dark-theme .user-info { color: #f8fafc !important; }
+        
+        body.dark-theme th { background-color: #0f172a !important; border-bottom: 2px solid #334155 !important; }
+        body.dark-theme td, body.dark-theme tr { border-color: #334155; background: #1e293b !important; }
+        
+        body.dark-theme input, body.dark-theme select { background-color: #0f172a; color: #f8fafc; border: 1px solid #475569; }
+        body.dark-theme .edit-block { background: #0f172a; border-color: #334155; }
+        body.dark-theme .item-edit-row, body.dark-theme .form-add-novo { background: #1e293b !important; border-color: #334155 !important; }
+        body.dark-theme .stat-card.disabled { opacity: 0.3; }
+        body.dark-theme .patrimonio-badge { background: #0f172a !important; border-color: #334155 !important; color: #cbd5e1 !important; }
+        body.dark-theme .tab-btn { color: #94a3b8; }
+        body.dark-theme .tab-btn.active { color: #3b82f6; border-bottom-color: #3b82f6; }
+
+        /* Estilo do botão de Tema (Lua/Sol) */
+        .btn-theme-toggle { background: transparent; border: none; font-size: 1.3rem; color: #475569; cursor: pointer; padding: 0 5px; transition: color 0.3s; display: flex; align-items: center; justify-content: center; }
+        body.dark-theme .btn-theme-toggle { color: #cbd5e1; }
+        .btn-theme-toggle:hover { color: #3b82f6; }
+
+        /* --- 🚀 ESTRUTURA BLINDADA DO HEADER (DESKTOP) --- */
+        .main-header { display: flex; align-items: center; justify-content: space-between; gap: 15px; height: auto !important; min-height: fit-content !important; padding: 15px; flex-wrap: wrap; }
+        .header-right-panel { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+        
+        /* Contêineres normais no desktop */
+        .mobile-row-1, .mobile-row-2 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        
+        .user-info { color: #475569; font-weight: 600; display: flex; align-items: center; gap: 5px; margin: 0 !important; width: auto !important; }
+        .btn-sair-mobile { display: none !important; }
+        
+        .btn-sair-desk { background: #ef4444 !important; border-color: #dc2626 !important; color: #fff !important; }
+        .btn-sair-desk:hover { background: #dc2626 !important; }
+        .btn-defeitos { background: #ef4444 !important; border-color: #dc2626 !important; box-shadow: 0 4px 6px rgba(239,68,68,0.3) !important; color: #fff !important; }
+
+        /* --- 🚀 MOBILE: CORREÇÃO DEFINITIVA --- */
+        @media (max-width: 768px) {
+            .main-header { flex-direction: column; align-items: center !important; gap: 12px; padding: 15px 10px !important; }
+            .header-title { width: 100%; justify-content: center; text-align: center; }
+            .header-right-panel { flex-direction: column; width: 100%; gap: 10px; align-items: center; }
+            
+            /* Linha 1 no mobile: Lua | Nome | Sair */
+            .mobile-row-1 { justify-content: center; width: 100%; gap: 15px; flex-wrap: nowrap; }
+            .btn-sair-desk { display: none !important; }
+            .btn-sair-mobile { display: flex !important; background: transparent; border: none; color: #ef4444; font-weight: 600; align-items: center; gap: 5px; font-size: 0.95rem; cursor: pointer; padding: 0; }
+            
+            /* Linha 2 no mobile: Novo Inventário | Estoque */
+            .mobile-row-2 { justify-content: center; width: 100%; gap: 10px; flex-wrap: nowrap !important; }
+            
+            /* 🚫 ANULANDO O BOTÃO FLUTUANTE DO SEU MAIN.CSS 🚫 */
+            .main-header .btn-add-novo {
+                position: relative !important; /* Arranca eles do fundo da tela */
+                bottom: auto !important;
+                right: auto !important;
+                left: auto !important;
+                top: auto !important;
+                transform: none !important;
+                width: auto !important; /* Abraça apenas o texto */
+                max-width: none !important;
+                height: auto !important;
+                border-radius: 6px !important; /* Tira o formato de círculo */
+                padding: 6px 12px !important;
+                margin: 0 !important;
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+                white-space: nowrap !important; /* Impede o texto de quebrar */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast-container"></div>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <i class="fas fa-microchip"></i>
+            <h2>Ebalmaq</h2>
+            <p>Acesso Restrito - Rede</p>
+            <form id="form-login" onsubmit="fazerLogin(event)">
+                <input type="text" id="login-user" class="login-input" placeholder="Usuário da Rede" required autocomplete="username">
+                <input type="password" id="login-pass" class="login-input" placeholder="Senha" required autocomplete="current-password">
+                <button type="submit" id="btn-entrar" class="login-btn">Entrar no Sistema</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="app-screen">
+        <div class="container">
+            <div id="stickyTop">
+                
+                <div class="main-header">
+                    
+                    <div class="header-title" style="flex-shrink: 0;">
+                        <i class="fas fa-microchip"></i>
+                        <span id="main-title-text" style="font-weight: 600;">Ebalmaq - Gestão</span>
+                    </div>
+
+                    <div class="header-right-panel">
+                        
+                        <!-- LINHA 1 (No Desktop fica tudo na mesma linha) -->
+                        <div class="mobile-row-1">
+                            <button id="btn-dark-mode" class="btn-theme-toggle" onclick="toggleDarkMode()" title="Alternar Modo Escuro">
+                                <i class="fas fa-moon"></i>
+                            </button>
+
+                            <div class="user-info">
+                                <i class="fas fa-user-circle"></i> <span id="display-user">Usuário</span>
+                            </div>
+
+                            <button class="btn-sair-mobile" onclick="fazerLogout()" title="Sair">
+                                <i class="fas fa-sign-out-alt"></i> Sair
+                            </button>
+                        </div>
+
+                        <!-- LINHA 2 (No Desktop fica tudo na mesma linha) -->
+                        <div class="mobile-row-2">
+                            <button id="btn-add-inv" class="btn-add-novo" onclick="abrirModalNovoInventario()">
+                                <i class="fas fa-plus"></i> <span>Novo Inventário</span>
+                            </button>
+                            
+                            <button id="btn-ver-defeitos" class="btn-add-novo btn-defeitos" style="display: none;" onclick="abrirModalDefeitos()">
+                                <i class="fas fa-tools"></i> <span>Itens com Defeito</span>
+                            </button>
+
+                            <button id="btn-toggle-view" class="btn-add-novo" style="background: #3b82f6; border-color: #2563eb;" onclick="toggleView()">
+                                <i class="fas fa-boxes"></i> <span>Visualizar Estoque</span>
+                            </button>
+                            
+                            
+
+                            <button class="btn-add-novo btn-sair-desk" onclick="fazerLogout()" title="Sair">
+                                <i class="fas fa-sign-out-alt"></i> <span>Sair</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="stat-cards-wrapper" id="painel-estatisticas">
+                    <div id="statCardsContainer" class="stat-cards"></div>
+                </div>
+
+                <div class="controls-wrapper" id="painel-filtros">
+                    <div class="controls-container">
+                        <div class="filtros">
+                            <div class="filtro-group">
+                                <label>Andar</label><select id="andarSelect"></select>
+                            </div>
+                            <div class="filtro-group">
+                                <label>Setor</label><select id="setorSelect"></select>
+                            </div>
+                            <div class="filtro-group">
+                                <label>Sala</label><select id="salaSelect"></select>
+                            </div>
+                            <div class="filtro-group">
+                                <label>Marca</label><select id="marcaSelect"></select>
+                            </div>
+                            <div class="filtro-group">
+                                <label>Tipo Equip.</label><select id="tipoSelect"></select>
+                            </div>
+                            <div class="filtro-group">
+                                <label>Status</label>
+                                <select id="statusSelect">
+                                    <option value="">Todos</option>
+                                    <option value="verificar">Pendência</option>
+                                    <option value="ok">Ok</option>
+                                </select>
+                            </div>
+                            <div class="filtro-group">
+                                <label>Busca</label>
+                                <div style="display: flex; gap: 5px;">
+                                    <input type="text" id="searchInput" placeholder="Patrimônio, Modelo, Sala..." />
+                                    <button class="btn-save-pat" style="background: var(--text-muted); width: 34px; height: 34px; border-radius: 8px;" onclick="limparFiltros()" title="Limpar todos os filtros">
+                                        <i class="fas fa-eraser"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <div class="table-container" id="container-ativos">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="15%" onclick="ordenarTabela('local')" title="Ordenar por Local">Local <i class="fas fa-sort sort-icon" id="sort-icon-local"></i></th>
+                                <th width="25%" onclick="ordenarTabela('pc')" title="Ordenar por Computadores">Computador(es) <i class="fas fa-sort sort-icon" id="sort-icon-pc"></i></th>
+                                <th width="20%" onclick="ordenarTabela('notebook')" title="Ordenar por Notebooks">Notebook(s) <i class="fas fa-sort sort-icon" id="sort-icon-notebook"></i></th>
+                                <th width="15%" onclick="ordenarTabela('mon')" title="Ordenar por Monitores">Monitor(es) <i class="fas fa-sort sort-icon" id="sort-icon-mon"></i></th>
+                                <th width="20%" onclick="ordenarTabela('extras')" title="Ordenar por Extras">Extras / Acessórios <i class="fas fa-sort sort-icon" id="sort-icon-extras"></i></th>
+                                <th width="15%" onclick="ordenarTabela('obs')" title="Ordenar por Observação">Obs. <i class="fas fa-sort sort-icon" id="sort-icon-obs"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventarioTable"></tbody>
+                    </table>
+                </div>
+
+                <div class="table-container" id="container-estoque" style="display: none; box-shadow: none;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <thead style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
+                            <tr>
+                                <th style="padding: 15px; font-size: 0.85rem; color: #64748b; width: 20%;">Tipo</th>
+                                <th style="padding: 15px; font-size: 0.85rem; color: #64748b; width: 60%;">Modelo</th>
+                                <th style="padding: 15px; font-size: 0.85rem; color: #64748b; text-align: center; width: 20%;">Quantidade Disponível</th>
+                            </tr>
+                        </thead>
+                        <tbody id="estoqueTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🚀 MODAL DE DEFEITOS -->
+    <div id="defeitosModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 650px;">
+            <div class="modal-header">
+                <div>
+                    <span style="font-size: 0.75rem; text-transform:uppercase; font-weight:700; opacity:0.9;">Manutenção</span>
+                    <h2 style="margin: 0; font-size: 1.1rem; color: #ffffff;">Itens com Defeito</h2>
+                </div>
+                <button class="modal-close" onclick="toggleModal('defeitosModal', false)">&times;</button>
+            </div>
+            <div class="modal-body" id="defeitosModalBody" style="display: flex; flex-direction: column; gap: 10px; max-height: 65vh; overflow-y: auto;">
+                </div>
+        </div>
+    </div>
+
+    <div id="detalhesCardModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 650px;">
+            <div class="modal-header">
+                <div>
+                    <span style="font-size: 0.75rem; text-transform:uppercase; font-weight:700; opacity:0.9;">Distribuição por Andar / Setorial</span>
+                    <h2 id="detalhesModalTitle" style="margin: 0; font-size: 1.1rem; color: #ffffff;">Equipamentos</h2>
+                </div>
+                <button class="modal-close" onclick="toggleModal('detalhesCardModal', false)">&times;</button>
+            </div>
+            <div class="modal-body" id="detalhesModalBody"></div>
+        </div>
+    </div>
+
+    <div id="novoInventarioModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <div>
+                    <span style="font-size: 0.75rem; text-transform:uppercase; font-weight:700; opacity:0.9;">Cadastro Rápido</span>
+                    <h2 style="margin: 0; font-size: 1.1rem; color: #ffffff;">Novo Inventário</h2>
+                </div>
+                <button class="modal-close" onclick="toggleModal('novoInventarioModal', false)">&times;</button>
+            </div>
+            
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="edit-block" style="margin-bottom: 0;">
+                    <div class="edit-block-title"><i class="fas fa-map-marker-alt"></i> Localização</div>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <div class="filtro-group" style="flex: 1;">
+                            <label>Andar <span style="color: var(--error-color);">*</span></label>
+                            <select id="ni-andar" onchange="atualizarSetoresNI()">
+                                <option value="">Selecione o Andar...</option>
+                            </select>
+                            <input type="text" id="ni-andar-outro" placeholder="Digite o andar..." style="display: none; margin-top: 5px;">
+                        </div>
+                        <div class="filtro-group" style="flex: 1;">
+                            <label>Setor <span style="color: var(--error-color);">*</span></label>
+                            <select id="ni-setor" onchange="verificarOutroSetorNI()" disabled>
+                                <option value="">Aguardando Andar...</option>
+                            </select>
+                            <input type="text" id="ni-setor-outro" placeholder="Digite o setor..." style="display: none; margin-top: 5px;">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <div class="filtro-group" style="flex: 1;">
+                            <label>Sala / Mesa <span style="color: var(--error-color);">*</span></label>
+                            <input type="text" id="ni-sala" placeholder="Ex: Sala 1305" autocomplete="off">
+                        </div>
+                        <div class="filtro-group" style="flex: 1;">
+                            <label>Observação (Opcional)</label>
+                            <input type="text" id="ni-obs" placeholder="Ex: Ramal 1234" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="edit-block" style="margin-bottom: 0;">
+                    <div class="edit-block-title" style="margin-bottom: 10px;"><i class="fas fa-plug"></i> Equipamentos e Extras</div>
+                    
+                    <div id="ni-equipamentos-container" style="display: flex; flex-direction: column;"></div>
+
+                    <button type="button" class="btn-add-mini" style="background: #e0f2fe; color: #0284c7; border-color: #bae6fd; width: 100%; justify-content: center; margin-top: 10px;" onclick="adicionarLinhaEquipamentoNI()">
+                        <i class="fas fa-plus"></i> Adicionar Item
+                    </button>
+                </div>
+                
+                <button id="btn-salvar-ni" class="btn-add-novo" style="width: 100%; justify-content: center; margin-top: 5px;" onclick="salvarNovoInventario()">
+                    <i class="fas fa-save"></i> Gravar Inventário
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="itemModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <span id="modalContext" style="font-size: 0.75rem; text-transform:uppercase; font-weight:700; opacity:0.9;">Ficha do Ativo</span>
+                    <h2 id="modalTitle" style="margin: 0; font-size: 1.1rem; color: #ffffff;">Sala 000</h2>
+                    <div id="modalObs" style="font-size: 0.85rem; color: #e2e8f0; margin-top: 4px; display: none;"></div>
+                </div>
+                <button id="modalClose" class="modal-close" onclick="toggleModal('itemModal', false)">&times;</button>
+            </div>
+            <div class="modal-tabs">
+                <button id="btn-tab-equip" class="tab-btn active" onclick="switchTab('tab-equip')">Equipamentos</button>
+                <button id="btn-tab-acessorios" class="tab-btn" onclick="switchTab('tab-acessorios')">Extras / Acessórios</button>
+                <button id="btn-tab-hist" class="tab-btn" onclick="switchTab('tab-hist')">Histórico</button>
+            </div>
+            <div id="modalBody" class="modal-body"></div>
+        </div>
+    </div>
+
+<script>
+    // ==============================================================
+    // 🛡️ SISTEMA DE PROTEÇÃO (XSS E INJEÇÃO HTML)
+    // ==============================================================
+    function escapeHTML(str) {
+        if (typeof str !== 'string') return str;
+        return str.replace(/[&<>'"]/g, 
+            tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag])
+        );
+    }
+
+    function escapeJS(str) {
+        if (typeof str !== 'string') return '';
+        return str.replace(/\\/g, '\\\\')
+                  .replace(/'/g, "\\'")
+                  .replace(/"/g, '&quot;')
+                  .replace(/</g, '&lt;')
+                  .replace(/>/g, '&gt;');
+    }
+
+    let dadosAPI = []; 
+    let dadosAtuais = []; 
+    let filtroCardAtivo = null;
+    let ordemAtual = { coluna: 'local', asc: true };
+    let estoqueReal = {}; 
+    let viewAtual = 'ativos'; 
+
+    const hierarquiaLocais = {
+        "TÉRREO": ["Portaria", "Protocolo", "Copa", "Auditório"],
+        "7º ANDAR": ["Biblioteca", "CPRACES"],
+        "8º ANDAR": ["ESPGE"],
+        "9º ANDAR": ["GIN", "Almoxarifado", "UNIGE"],
+        "10º ANDAR": ["PFI", "PPETRO", "Dívida Ativa", "NTT", "GCI", "Protocolo", "DETRAN"],
+        "11º ANDAR": ["PCJ", "PSA"],
+        "12º ANDAR": ["PCA", "PPE", "PTR", "PEP", "GFS / GPO", "GCP"],
+        "13º ANDAR": ["Corregedoria", "CEI", "GPGE", "Comunicação", "Gabinete", "GARH", "Setor de contratos", "GEAD", "Gerência Geral"]
+    };
+
+    const inputs = {
+        andar: document.getElementById("andarSelect"), 
+        setor: document.getElementById("setorSelect"),
+        sala: document.getElementById("salaSelect"), 
+        marca: document.getElementById("marcaSelect"), 
+        tipo: document.getElementById("tipoSelect"),
+        status: document.getElementById("statusSelect"), 
+        search: document.getElementById("searchInput")
+    };
+
+    // ==============================================================
+    // 🔐 SISTEMA DE TOKEN SEGURO NO CLIENTE E MODO ESCURO
+    // ==============================================================
+    function getToken() { return localStorage.getItem('ebalmaq_token'); }
+
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-theme');
+        const icon = document.querySelector('#btn-dark-mode i');
+        if (document.body.classList.contains('dark-theme')) {
+            localStorage.setItem('ebalmaq_theme', 'dark');
+            icon.classList.replace('fa-moon', 'fa-sun');
+        } else {
+            localStorage.setItem('ebalmaq_theme', 'light');
+            icon.classList.replace('fa-sun', 'fa-moon');
+        }
+    }
+
+    async function apiFetch(endpoint, opcoes = {}) {
+        const token = getToken();
+        if (!opcoes.headers) opcoes.headers = {};
+        if (token) opcoes.headers['Authorization'] = `Bearer ${token}`;
+        
+        const res = await fetch(endpoint, opcoes);
+        
+        if (res.status === 401) {
+            localStorage.removeItem('ebalmaq_token');
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('app-screen').style.display = 'none';
+            throw new Error("Sessão Expirada");
+        }
+        return res;
+    }
+
+    window.onload = async () => {
+        if (localStorage.getItem('ebalmaq_theme') === 'dark') {
+            document.body.classList.add('dark-theme');
+            document.querySelector('#btn-dark-mode i').classList.replace('fa-moon', 'fa-sun');
+        }
+
+        if (!getToken()) {
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('app-screen').style.display = 'none';
+            return;
+        }
+        iniciarSistema();
+    };
+
+    async function fazerLogin(e) {
+        e.preventDefault();
+        const user = document.getElementById('login-user').value;
+        const pass = document.getElementById('login-pass').value;
+        const btn = document.getElementById('btn-entrar');
+        
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Autenticando...';
+        btn.disabled = true;
+
+        try {
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usuario: user, senha: pass })
+            });
+
+            const data = await res.json();
+            
+            if (res.ok && data.sucesso) {
+                localStorage.setItem('ebalmaq_token', data.token);
+                document.getElementById('form-login').reset();
+                iniciarSistema();
+            } else {
+                mostrarNotificacao(data.erro || 'Falha na autenticação', 'error');
+            }
+        } catch (error) {
+            mostrarNotificacao("Servidor offline ou rede indisponível.", "error");
+        } finally {
+            btn.innerHTML = 'Entrar no Sistema';
+            btn.disabled = false;
+        }
+    }
+
+    function fazerLogout() {
+        apiFetch('/api/logout', { method: 'POST' }).finally(() => {
+            localStorage.removeItem('ebalmaq_token');
+            window.location.reload(); 
+        });
+    }
+
+    async function iniciarSistema() {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app-screen').style.display = 'flex';
+
+        try {
+            const res = await apiFetch('/api/me');
+            if (res.ok) {
+                const data = await res.json();
+                document.getElementById('display-user').innerText = escapeHTML(data.nome || data.usuario);
+            }
+            await carregarEstoqueReal();
+            await carregarDadosDaAPI();
+        } catch (error) { console.error(error); }
+    }
+
+    async function carregarEstoqueReal() {
+        try {
+            const res = await apiFetch('/api/estoque');
+            if (!res.ok) return;
+            const data = await res.json();
+            estoqueReal = {};
+            data.forEach(item => {
+                if (!estoqueReal[item.tipo]) estoqueReal[item.tipo] = [];
+                estoqueReal[item.tipo].push({ modelo: item.modelo, qtd: item.qtd });
+            });
+            
+            if (viewAtual === 'estoque') {
+                renderizarTabelaEstoqueDireta();
+            }
+        } catch (e) { console.error("Erro ao carregar estoque:", e); }
+    }
+
+    function toggleView() {
+        const btn = document.getElementById('btn-toggle-view');
+        const tituloMenu = document.getElementById('main-title-text');
+        
+        const contAtivos = document.getElementById('container-ativos');
+        const contEstoque = document.getElementById('container-estoque');
+        
+        const painelFiltros = document.getElementById('painel-filtros');
+        const painelEstat = document.getElementById('painel-estatisticas');
+        const btnNovoInv = document.getElementById('btn-add-inv');
+        const btnDefeitos = document.getElementById('btn-ver-defeitos');
+
+        if (viewAtual === 'ativos') {
+            viewAtual = 'estoque';
+            tituloMenu.innerText = "Ebalmaq - Estoque Geral";
+            
+            btn.innerHTML = '<i class="fas fa-desktop"></i> <span>Visualizar Mesas</span>';
+            btn.style.background = '#8b5cf6'; 
+            btn.style.borderColor = '#7c3aed';
+            
+            contAtivos.style.display = 'none';
+            contEstoque.style.display = 'block';
+            
+            painelFiltros.style.display = 'none'; 
+            painelEstat.style.display = 'none'; 
+            
+            btnNovoInv.style.display = 'none';
+            btnDefeitos.style.display = 'inline-flex';
+
+            renderizarTabelaEstoqueDireta();
+        } else {
+            viewAtual = 'ativos';
+            tituloMenu.innerText = "Ebalmaq - Gestão de Ativos";
+
+            btn.innerHTML = '<i class="fas fa-boxes"></i> <span>Visualizar Estoque</span>';
+            btn.style.background = '#3b82f6';
+            btn.style.borderColor = '#2563eb';
+
+            contAtivos.style.display = 'block';
+            contEstoque.style.display = 'none';
+            
+            painelFiltros.style.display = 'block';
+            painelEstat.style.display = 'block';
+            
+            btnNovoInv.style.display = 'inline-flex';
+            btnDefeitos.style.display = 'none'; 
+        }
+    }
+
+    function renderizarTabelaEstoqueDireta() {
+        const tbody = document.getElementById('estoqueTableBody');
+        tbody.innerHTML = '';
+        
+        const tipos = Object.keys(estoqueReal);
+        if (tipos.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 30px; color: #94a3b8; font-style: italic;">Não há itens no estoque no momento.</td></tr>';
+        } else {
+            tipos.forEach(tipo => {
+                const itens = estoqueReal[tipo];
+                
+                let nomeTipo = tipo.charAt(0).toUpperCase() + tipo.slice(1);
+                let icone = 'fa-plug';
+                if (tipo === 'pc') { nomeTipo = 'Computador'; icone = 'fa-desktop'; }
+                else if (tipo === 'notebook') { nomeTipo = 'Notebook'; icone = 'fa-laptop'; }
+                else if (tipo === 'mon') { nomeTipo = 'Monitor'; icone = 'fa-tv'; }
+                else if (tipo === 'impressora') { icone = 'fa-print'; }
+                else if (tipo === 'camera') { nomeTipo = 'Câmera'; icone = 'fa-video'; }
+
+                itens.sort((a,b) => b.qtd - a.qtd);
+
+                itens.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.style.borderBottom = "1px solid #f1f5f9";
+                    tr.innerHTML = `
+                        <td style="padding: 15px; font-weight: 600; color: #475569; font-size: 0.95rem;">
+                            <i class="fas ${icone}" style="color: var(--primary-color); margin-right: 8px;"></i> ${nomeTipo}
+                        </td>
+                        <td style="padding: 15px; color: #334155; font-size: 0.95rem;" class="estoque-model-text">${escapeHTML(item.modelo)}</td>
+                        <td style="padding: 15px; text-align: center;">
+                            <span style="display: inline-block; background: #f0f9ff; color: #0284c7; border: 1px solid #bae6fd; padding: 4px 14px; border-radius: 99px; font-weight: 700; font-size: 0.95rem;">
+                                ${item.qtd}
+                            </span>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            });
+        }
+    }
+
+    async function abrirModalDefeitos() {
+        try {
+            const res = await apiFetch('/api/defeitos');
+            if (!res.ok) {
+                mostrarNotificacao("Erro ao buscar itens com defeito.", "error");
+                return;
+            }
+            const dados = await res.json();
+            const containerBody = document.getElementById('defeitosModalBody');
+            containerBody.innerHTML = '';
+            
+            if (dados.length === 0) {
+                containerBody.innerHTML = '<div style="text-align: center; padding: 30px; color: #94a3b8; font-style: italic;">Não há nenhum equipamento com defeito registrado.</div>';
+            } else {
+                dados.forEach(item => {
+                    let nomeTipo = item.tipo.charAt(0).toUpperCase() + item.tipo.slice(1);
+                    let icone = 'fa-plug';
+                    if (item.tipo === 'pc') { nomeTipo = 'Computador'; icone = 'fa-desktop'; }
+                    else if (item.tipo === 'notebook') { nomeTipo = 'Notebook'; icone = 'fa-laptop'; }
+                    else if (item.tipo.startsWith('mon')) { nomeTipo = 'Monitor'; icone = 'fa-tv'; }
+                    else if (item.tipo === 'impressora') { nomeTipo = 'Impressora'; icone = 'fa-print'; }
+                    else if (item.tipo === 'camera') { nomeTipo = 'Câmera'; icone = 'fa-video'; }
+
+                    const patStatus = (!item.patrimonio || item.patrimonio === '0' || item.patrimonio.startsWith('0_temp')) ? 'Sem Patrimônio' : item.patrimonio;
+
+                    const div = document.createElement('div');
+                    div.className = 'item-edit-row';
+                    div.style.padding = "10px 15px";
+                    
+                    div.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px;">
+                            <div style="display: flex; align-items: center; gap: 15px; flex: 1; min-width: 200px;">
+                                <div style="font-weight: 600; color: #ef4444; width: 130px; flex-shrink: 0;"><i class="fas ${icone}"></i> ${nomeTipo}</div>
+                                <div style="font-weight: 500; font-size: 0.9rem;" class="def-model-text">${escapeHTML(item.modelo)}</div>
+                            </div>
+                            <div>
+                                <span class="patrimonio-badge" style="background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; white-space: nowrap;">PAT: ${escapeHTML(patStatus)}</span>
+                            </div>
+                        </div>
+                    `;
+                    containerBody.appendChild(div);
+                });
+            }
+            toggleModal('defeitosModal', true);
+        } catch (e) {
+            mostrarNotificacao("Servidor offline ou erro de conexão.", "error");
+        }
+    }
+
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal-overlay')) {
+            event.target.classList.remove('visible');
+        }
+    }
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "Escape") {
+            document.querySelectorAll('.modal-overlay.visible').forEach(modal => {
+                modal.classList.remove('visible');
+            });
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        Object.keys(inputs).forEach(key => {
+            const el = inputs[key];
+            el.addEventListener(el.tagName === 'INPUT' ? 'input' : 'change', () => {
+                if (key === 'tipo') {
+                    filtroCardAtivo = inputs.tipo.value ? (inputs.tipo.value.charAt(0).toUpperCase() + inputs.tipo.value.slice(1)) : null;
+                    if (filtroCardAtivo === 'Câmera') filtroCardAtivo = 'Câmera'; 
+                }
+                
+                if (el.tagName === 'SELECT' && el.value === "") {
+                    if (key === 'andar') {
+                        inputs.setor.value = "";
+                        inputs.sala.value = "";
+                    } else if (key === 'setor') {
+                        inputs.sala.value = "";
+                    }
+                }
+
+                populaFiltrosBaseadosEmDados();
+                atualizarTabela();
+            });
+        });
+
+        const wrapperFiltros = document.querySelector('.controls-wrapper');
+        const wrapperTabela = document.querySelector('.table-wrapper');
+
+        if (wrapperFiltros && wrapperTabela) {
+            let isScrollingFiltros = false;
+            let isScrollingTabela = false;
+
+            wrapperFiltros.addEventListener('scroll', () => {
+                if (!isScrollingTabela) {
+                    isScrollingFiltros = true;
+                    wrapperTabela.scrollLeft = wrapperFiltros.scrollLeft;
+                    isScrollingFiltros = false;
+                }
+            });
+
+            wrapperTabela.addEventListener('scroll', () => {
+                if (!isScrollingFiltros) {
+                    isScrollingTabela = true;
+                    wrapperFiltros.scrollLeft = wrapperTabela.scrollLeft;
+                    isScrollingTabela = false;
+                }
+            });
+        }
+    });
+
+    function limparFiltros() {
+        Object.keys(inputs).forEach(key => { inputs[key].value = ""; });
+        filtroCardAtivo = null;
+        populaFiltrosBaseadosEmDados();
+        atualizarTabela();
+    }
+
+    function mostrarNotificacao(mensagem, tipo = 'info') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${tipo}`;
+        let cor = 'var(--primary-color)', icone = 'fa-info-circle';
+        
+        if (tipo === 'success') { cor = 'var(--success-color)'; icone = 'fa-check-circle'; }
+        if (tipo === 'error') { cor = 'var(--error-color)'; icone = 'fa-exclamation-circle'; }
+        if (tipo === 'warning') { cor = 'var(--warning-color)'; icone = 'fa-exclamation-triangle'; }
+
+        toast.style.borderLeftColor = cor;
+        toast.innerHTML = `<i class="fas ${icone}" style="color: ${cor}; font-size: 1.3rem;"></i> <span style="color: var(--text-main);">${escapeHTML(mensagem)}</span>`;
+        
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.add('show'), 10);
+        setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 4000);
+    }
+
+    async function carregarDadosDaAPI() {
+        try {
+            const resposta = await apiFetch('/api/inventario');
+            
+            if (!resposta.ok) {
+                const erroData = await resposta.json();
+                mostrarNotificacao(erroData.erro || "Erro ao ler banco de dados.", "error");
+                dadosAPI = [];
+                dadosAtuais = [];
+                renderizar([], null, null, null, null, "");
+                return;
+            }
+
+            dadosAPI = await resposta.json();
+            if (!Array.isArray(dadosAPI)) dadosAPI = [];
+
+            dadosAtuais = [...dadosAPI];
+            populaFiltrosBaseadosEmDados();
+            atualizarTabela();
+        } catch (erro) { console.error("Falha ao carregar dados", erro); }
+    }
+
+    function abrirModalNovoInventario() {
+        const selAndar = document.getElementById('ni-andar');
+        selAndar.innerHTML = '<option value="">Selecione o Andar...</option>';
+        Object.keys(hierarquiaLocais).forEach(andar => {
+            selAndar.add(new Option(andar, andar));
+        });
+        selAndar.add(new Option('Outro (Digitar manualmente...)', 'outro'));
+        
+        const selSetor = document.getElementById('ni-setor');
+        selSetor.innerHTML = '<option value="">Aguardando Andar...</option>';
+        selSetor.disabled = true;
+
+        document.getElementById('ni-andar-outro').style.display = 'none';
+        document.getElementById('ni-andar-outro').value = '';
+        document.getElementById('ni-andar-outro').style.borderColor = '#e2e8f0';
+
+        document.getElementById('ni-setor-outro').style.display = 'none';
+        document.getElementById('ni-setor-outro').value = '';
+        document.getElementById('ni-setor-outro').style.borderColor = '#e2e8f0';
+
+        document.getElementById('ni-sala').value = '';
+        document.getElementById('ni-sala').style.borderColor = '#e2e8f0';
+        document.getElementById('ni-obs').value = '';
+
+        document.getElementById('ni-equipamentos-container').innerHTML = '';
+        adicionarLinhaEquipamentoNI();
+
+        toggleModal('novoInventarioModal', true);
+    }
+
+    function atualizarSetoresNI() {
+        const andar = document.getElementById('ni-andar').value;
+        const selSetor = document.getElementById('ni-setor');
+        const inputAndarOutro = document.getElementById('ni-andar-outro');
+        const inputSetorOutro = document.getElementById('ni-setor-outro');
+        
+        selSetor.innerHTML = '<option value="">Selecione o Setor...</option>';
+        inputSetorOutro.style.display = 'none';
+        inputSetorOutro.value = '';
+        inputSetorOutro.style.borderColor = '#e2e8f0';
+        inputAndarOutro.style.borderColor = '#e2e8f0';
+
+        if (andar === 'outro') {
+            inputAndarOutro.style.display = 'block';
+            inputAndarOutro.focus();
+            
+            selSetor.innerHTML = '<option value="outro">Outro (Digitar manualmente...)</option>';
+            selSetor.value = 'outro';
+            selSetor.disabled = false;
+            verificarOutroSetorNI();
+            return;
+        } else {
+            inputAndarOutro.style.display = 'none';
+            inputAndarOutro.value = '';
+        }
+        
+        if (!andar || !hierarquiaLocais[andar]) {
+            selSetor.disabled = true;
+            return;
+        }
+        
+        selSetor.disabled = false;
+        hierarquiaLocais[andar].forEach(setor => {
+            selSetor.add(new Option(setor, setor));
+        });
+        
+        selSetor.add(new Option('Outro (Digitar manualmente...)', 'outro'));
+    }
+
+    function verificarOutroSetorNI() {
+        const sel = document.getElementById('ni-setor');
+        const inputOutro = document.getElementById('ni-setor-outro');
+        inputOutro.style.borderColor = '#e2e8f0';
+        
+        if (sel.value === 'outro') {
+            inputOutro.style.display = 'block';
+            inputOutro.focus();
+        } else {
+            inputOutro.style.display = 'none';
+            inputOutro.value = '';
+        }
+    }
+
+    function adicionarLinhaEquipamentoNI() {
+        const container = document.getElementById('ni-equipamentos-container');
+        const idLinha = Date.now().toString() + Math.floor(Math.random() * 100);
+        
+        const div = document.createElement('div');
+        div.className = 'item-edit-row';
+        div.style.marginBottom = '10px';
+        div.id = `linha-ni-${idLinha}`;
+        
+        div.innerHTML = `
+            <div style="display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; width: 100%;">
+                <div class="filtro-group" style="flex: 1; min-width: 120px;">
+                    <label>Tipo</label>
+                    <select id="ni-tipo-${idLinha}" onchange="atualizarModelosNI('${idLinha}')">
+                        <option value="">Selecione...</option>
+                        <option value="pc">Computador</option>
+                        <option value="notebook">Notebook</option>
+                        <option value="mon">Monitor</option>
+                        <option value="impressora">Impressora</option>
+                        <option value="camera">Câmera</option>
+                        <option value="tv">TV</option>
+                    </select>
+                </div>
+                <div class="filtro-group" style="flex: 2; min-width: 180px;">
+                    <label>Modelo</label>
+                    <select id="ni-mod-${idLinha}" onchange="verificarOutroModeloNI('${idLinha}')" disabled>
+                        <option value="">Aguardando Tipo...</option>
+                    </select>
+                    <input type="text" id="ni-mod-outro-${idLinha}" placeholder="Qual o modelo?" style="display: none; margin-top: 5px;">
+                </div>
+                <div class="filtro-group" style="flex: 1; min-width: 120px;">
+                    <label>Patrimônio</label>
+                    <input type="text" id="ni-pat-${idLinha}" placeholder="PAT" oninput="validarPatrimonioEmTempoReal(this, 'btn-salvar-ni', 'msg-ni-${idLinha}', '')">
+                    <div id="msg-ni-${idLinha}" class="pat-error-msg"></div>
+                </div>
+                <button type="button" class="btn-save-pat" style="background: transparent; border: 1px solid var(--error-color); color: var(--error-color); margin-top: 26px;" onclick="removerLinhaNI('${idLinha}')" title="Remover linha">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
+        container.appendChild(div);
+    }
+
+    function removerLinhaNI(idLinha) {
+        const inline = document.getElementById(`linha-ni-${idLinha}`);
+        if(inline) inline.remove();
+        
+        const hasErrors = Array.from(document.querySelectorAll('.pat-error-msg')).some(el => el.style.display === 'block');
+        document.getElementById('btn-salvar-ni').disabled = hasErrors;
+    }
+
+    function atualizarModelosNI(idLinha) {
+        const tipo = document.getElementById(`ni-tipo-${idLinha}`).value;
+        const selMod = document.getElementById(`ni-mod-${idLinha}`);
+        const inputOutro = document.getElementById(`ni-mod-outro-${idLinha}`);
+        
+        inputOutro.style.display = 'none';
+        inputOutro.value = '';
+        inputOutro.style.borderColor = '#e2e8f0';
+        
+        if (!tipo) {
+            selMod.innerHTML = '<option value="">Aguardando Tipo...</option>';
+            selMod.disabled = true;
+            return;
+        }
+
+        selMod.disabled = false;
+        selMod.innerHTML = '<option value="">Selecione do Estoque...</option>';
+        
+        if (estoqueReal[tipo]) {
+            estoqueReal[tipo].forEach(item => {
+                selMod.innerHTML += `<option value="${escapeHTML(item.modelo)}">${escapeHTML(item.modelo)} (Estoque: ${item.qtd})</option>`;
+            });
+        }
+        selMod.innerHTML += `<option value="outro">Outro modelo (Manual)...</option>`;
+    }
+
+    function verificarOutroModeloNI(idLinha) {
+        const sel = document.getElementById(`ni-mod-${idLinha}`);
+        const inputOutro = document.getElementById(`ni-mod-outro-${idLinha}`);
+        inputOutro.style.borderColor = '#e2e8f0';
+        
+        if (sel.value === 'outro') {
+            inputOutro.style.display = 'block';
+            inputOutro.focus();
+        } else {
+            inputOutro.style.display = 'none';
+            inputOutro.value = '';
+        }
+    }
+
+    async function salvarNovoInventario() {
+        const selectAndar = document.getElementById('ni-andar');
+        const inputAndarOutro = document.getElementById('ni-andar-outro');
+        let andar = selectAndar.value;
+        
+        inputAndarOutro.style.borderColor = '#e2e8f0';
+        if (andar === 'outro') {
+            andar = inputAndarOutro.value.trim();
+            if (!andar) inputAndarOutro.style.borderColor = 'var(--error-color)';
+        }
+        
+        const selectSetor = document.getElementById('ni-setor');
+        const inputSetorOutro = document.getElementById('ni-setor-outro');
+        let setor = selectSetor.value;
+        
+        inputSetorOutro.style.borderColor = '#e2e8f0';
+        if (setor === 'outro') {
+            setor = inputSetorOutro.value.trim();
+            if (!setor) inputSetorOutro.style.borderColor = 'var(--error-color)';
+        }
+        
+        const inputSala = document.getElementById('ni-sala');
+        inputSala.style.borderColor = '#e2e8f0';
+        const sala = inputSala.value.trim();
+        if (!sala) inputSala.style.borderColor = 'var(--error-color)';
+
+        if (!andar || !setor || !sala) {
+            mostrarNotificacao("Preencha todos os campos de localização obrigatórios.", "warning");
+            return;
+        }
+
+        const equipamentos = [];
+        const linhas = document.querySelectorAll('[id^="linha-ni-"]');
+        let modelValid = true;
+        
+        linhas.forEach(linha => {
+            const idLinha = linha.id.replace('linha-ni-', '');
+            const tipo = document.getElementById(`ni-tipo-${idLinha}`).value;
+            
+            const selectMod = document.getElementById(`ni-mod-${idLinha}`);
+            const inputModOutro = document.getElementById(`ni-mod-outro-${idLinha}`);
+            inputModOutro.style.borderColor = '#e2e8f0';
+            
+            let modelo = selectMod.value;
+            if (modelo === 'outro') {
+                modelo = inputModOutro.value.trim();
+                if (!modelo && tipo) {
+                    inputModOutro.style.borderColor = 'var(--error-color)';
+                    modelValid = false;
+                }
+            }
+            
+            const patrimonio = document.getElementById(`ni-pat-${idLinha}`).value.trim();
+
+            if (tipo && modelo) {
+                equipamentos.push({ tipo, modelo, patrimonio });
+            }
+        });
+
+        if (!modelValid) {
+            mostrarNotificacao("Preencha o modelo dos equipamentos em destaque.", "warning");
+            return;
+        }
+
+        const observacao = document.getElementById('ni-obs').value.trim();
+        const btn = document.getElementById('btn-salvar-ni');
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gravando...';
+
+        try {
+            const resposta = await apiFetch('/api/adicionar-inventario-completo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ andar, setor, sala, observacao, equipamentos })
+            });
+
+            if (resposta.ok) {
+                mostrarNotificacao('Inventário salvo com sucesso!', 'success');
+                toggleModal('novoInventarioModal', false);
+                document.getElementById('ni-setor-outro').value = '';
+                
+                await carregarEstoqueReal();
+                await carregarDadosDaAPI(); 
+            } else {
+                const dataErro = await resposta.json();
+                mostrarNotificacao(dataErro.erro || 'Erro ao gravar inventário.', 'error');
+            }
+        } catch (erro) {
+        } finally {
+            btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Gravar Inventário';
+        }
+    }
+
+    function equipamentoPassaFiltro(eq, d, fTipo, fMarca, fStatus, fCard, termo) {
+        if (!eq.modelo || eq.modelo === 'NÃO') return false;
+
+        let prefixo = eq.posicao.replace(/[0-9_]/g, '');
+        let typeStr = prefixo === 'pc' ? 'computador' : prefixo === 'mon' ? 'monitor' : prefixo;
+        if (prefixo === 'camera') typeStr = 'câmera';
+
+        if (fTipo && fTipo !== typeStr) return false;
+        if (fCard && fCard.toLowerCase() !== typeStr.toLowerCase()) return false;
+        if (fMarca && !eq.modelo.toLowerCase().includes(fMarca)) return false;
+
+        if (fStatus) {
+            const pendente = !eq.patrimonio || eq.patrimonio === "0";
+            if (fStatus === 'verificar' && !pendente) return false;
+            if (fStatus === 'ok' && pendente) return false;
+        }
+
+        if (termo) {
+            const estacaoStr = `${d.sala || ''} ${d.setor || ''} ${d.andar || ''} ${d.observacao || ''}`.toLowerCase();
+            const eqStr = `${eq.modelo || ''} ${eq.patrimonio || ''}`.toLowerCase();
+            if (!estacaoStr.includes(termo) && !eqStr.includes(termo)) return false;
+        }
+
+        return true;
+    }
+
+    function toggleFiltroCard(label) {
+        if (filtroCardAtivo === label) { filtroCardAtivo = null; inputs.tipo.value = ""; } 
+        else { filtroCardAtivo = label; inputs.tipo.value = label.toLowerCase(); }
+        populaFiltrosBaseadosEmDados(); atualizarTabela(); 
+    }
+
+    function getLabelPlural(label) {
+        if (label === 'Computador') return 'Computadores';
+        if (label === 'Monitor') return 'Monitores';
+        if (label === 'Câmera') return 'Câmeras';
+        if (label === 'TV') return 'TVs';
+        if (label === 'Impressora') return 'Impressoras';
+        if (label === 'Notebook') return 'Notebooks';
+        return label + 's';
+    }
+
+    function formatTextQtd(label, qtd) {
+        let l = qtd === 1 ? label.toLowerCase() : getLabelPlural(label).toLowerCase();
+        if(label === 'TV' && qtd === 1) l = 'TV';
+        if(label === 'TV' && qtd > 1) l = 'TVs';
+        return `${qtd} ${l}`;
+    }
+
+    function abrirDetalhesCard(label, event) {
+        event.stopPropagation(); 
+
+        const mapPrefix = {
+            'Computador': ['pc'],
+            'Notebook': ['notebook'],
+            'Monitor': ['mon'],
+            'TV': ['tv'],
+            'Impressora': ['impressora'],
+            'Câmera': ['camera']
+        };
+        const prefixos = mapPrefix[label];
+
+        const iconsMap = { 'Computador': 'fa-desktop', 'Notebook': 'fa-laptop', 'Monitor': 'fa-tv', 'TV': 'fa-display', 'Impressora': 'fa-print', 'Câmera': 'fa-video' };
+        const iconClass = iconsMap[label] || 'fa-plug';
+
+        const termo = inputs.search.value.toLowerCase();
+        const fMarca = inputs.marca.value.toLowerCase();
+        const fTipo = inputs.tipo.value.toLowerCase();
+        const fStatus = inputs.status.value;
+        const fCard = filtroCardAtivo ? filtroCardAtivo.toLowerCase() : null;
+
+        let agrupadoPorAndar = {};
+
+        dadosAtuais.forEach(d => {
+            const todos = d.todos_equipamentos || [];
+            
+            const itensFiltrados = todos.filter(eq => 
+                prefixos.some(p => eq.posicao.startsWith(p)) && 
+                eq.modelo && eq.modelo !== 'NÃO' && 
+                equipamentoPassaFiltro(eq, d, fTipo, fMarca, fStatus, fCard, termo)
+            );
+
+            if (itensFiltrados.length > 0) {
+                const andarNome = d.andar || 'Sem Andar';
+                const setorNome = d.setor || 'Sem Setor';
+
+                if (!agrupadoPorAndar[andarNome]) {
+                    agrupadoPorAndar[andarNome] = { nome: andarNome, totalQtd: 0, setores: {} };
+                }
+
+                if (!agrupadoPorAndar[andarNome].setores[setorNome]) {
+                    agrupadoPorAndar[andarNome].setores[setorNome] = { nome: setorNome, qtd: 0, itens: [] };
+                }
+
+                itensFiltrados.forEach(eq => {
+                    agrupadoPorAndar[andarNome].totalQtd++;
+                    agrupadoPorAndar[andarNome].setores[setorNome].qtd++;
+                    
+                    agrupadoPorAndar[andarNome].setores[setorNome].itens.push({
+                        id_estacao: d.id,
+                        sala: d.sala || 'Sem Sala',
+                        observacao: d.observacao || '',
+                        modelo: eq.modelo,
+                        patrimonio: (!eq.patrimonio || eq.patrimonio === '0' || eq.patrimonio.startsWith('0_temp')) ? 'Pendente' : eq.patrimonio
+                    });
+                });
+            }
+        });
+
+        window.dadosModalDetalhes = agrupadoPorAndar;
+
+        let andaresArray = Object.values(agrupadoPorAndar);
+        andaresArray.sort((a, b) => {
+            const andares = Object.keys(hierarquiaLocais);
+            const idxA = andares.indexOf(a.nome);
+            const idxB = andares.indexOf(b.nome);
+            if(idxA !== -1 && idxB !== -1) return idxA - idxB;
+            if(idxA !== -1) return -1;
+            if(idxB !== -1) return 1;
+            return a.nome.localeCompare(b.nome);
+        });
+
+        document.getElementById('detalhesModalTitle').innerText = `Onde estão? (${getLabelPlural(label)})`;
+        const tbody = document.getElementById('detalhesModalBody');
+
+        if (andaresArray.length === 0) {
+            tbody.innerHTML = '<div style="padding: 20px; text-align: center; color: #64748b; font-style: italic;">Nenhum item correspondente encontrado.</div>';
+        } else {
+            let html = `<div class="detalhes-list">`;
+            andaresArray.forEach((andar, i) => {
+                
+                let setoresObj = Object.values(andar.setores);
+                setoresObj.sort((a,b) => b.qtd - a.qtd || a.nome.localeCompare(b.nome));
+
+                let setoresHtmlText = setoresObj.map(s => {
+                    let textQtd = formatTextQtd(label, s.qtd);
+                    let safeAndar = escapeJS(andar.nome);
+                    let safeSetor = escapeJS(s.nome);
+                    
+                    return `<span class="setor-link" onclick="abrirResumoEquipamentos('${safeAndar}', '${safeSetor}', 'resumo-andar-${i}', '${iconClass}')" title="Clique para expandir os equipamentos"><strong>${escapeHTML(s.nome)}:</strong> ${textQtd}</span>`;
+                }).join('<span style="color: #cbd5e1; margin: 0 8px; font-weight: bold;">|</span>');
+
+                html += `
+                    <div class="detalhes-item" style="flex-direction: column; align-items: flex-start; cursor: default; padding: 10px;">
+                        <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 8px;">
+                            <div class="detalhes-local">
+                                <i class="fas fa-layer-group" style="color: var(--primary-color);"></i> ${escapeHTML(andar.nome)} 
+                            </div>
+                            <div class="detalhes-qtd" style="background: #f1f5f9; color: var(--text-main); border: 1px solid #e2e8f0;">Total: ${andar.totalQtd}</div>
+                        </div>
+                        <div style="font-size: 0.85rem; color: var(--text-main); line-height: 1.8; width: 100%;">
+                            ${setoresHtmlText}
+                        </div>
+                        <div id="resumo-andar-${i}" style="width: 100%;"></div>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+            tbody.innerHTML = html;
+        }
+
+        toggleModal('detalhesCardModal', true);
+    }
+
+    window.abrirResumoEquipamentos = function(andarNome, setorNome, containerId, iconClass) {
+        const container = document.getElementById(containerId);
+        const setorData = window.dadosModalDetalhes[andarNome].setores[setorNome];
+
+        let html = `<div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 12px; margin-top: 10px; animation: fadeInRow 0.3s ease-out forwards;">`;
+        html += `<div style="font-weight: 700; color: var(--primary-dark); font-size: 0.8rem; margin-bottom: 8px;"><i class="fas fa-level-down-alt" style="margin-right: 5px;"></i>${escapeHTML(setorNome)} - Equipamentos (Clique para abrir a ficha):</div>`;
+        html += `<div style="display: flex; flex-wrap: wrap; gap: 6px;">`;
+        
+        setorData.itens.sort((a,b) => a.modelo.localeCompare(b.modelo));
+
+        setorData.itens.forEach(item => {
+            let obsText = item.observacao ? ` | Obs: ${escapeHTML(item.observacao)}` : '';
+            let tooltip = `Sala: ${escapeHTML(item.sala)}${obsText}`;
+            
+            html += `
+                <div class="equip-badge" onclick="toggleModal('detalhesCardModal', false); abrirModalItemDadosId(${item.id_estacao})" title="${tooltip}">
+                    <span style="font-weight: 600; color: var(--text-main); display: flex; align-items: center;"><i class="fas ${iconClass}" style="margin-right:6px; color: var(--primary-color);"></i>${escapeHTML(item.modelo)}</span> 
+                    <span class="equip-pat">PAT: ${escapeHTML(item.patrimonio)}</span>
+                </div>
+            `;
+        });
+        html += `</div></div>`;
+        
+        if(container.innerHTML === html) {
+            container.innerHTML = '';
+        } else {
+            container.innerHTML = html;
+        }
+    }
+    
+    function abrirModalItemDadosId(id) {
+        const estacao = dadosAPI.find(e => e.id === id);
+        if (estacao) abrirModalItem(estacao);
+    }
+
+    function atualizarSelectOrdenado(campo, conjunto) {
+        const valorAtual = campo.value;
+        campo.innerHTML = '<option value="">Todos</option>';
+        Array.from(conjunto).sort((a, b) => a.toString().localeCompare(b.toString(), undefined, { numeric: true, sensitivity: 'base' }))
+             .forEach(item => campo.add(new Option(escapeHTML(item), escapeHTML(item))));
+        campo.value = valorAtual;
+    }
+
+    function populaFiltrosBaseadosEmDados() {
+        let marcas = new Set(), andares = new Set(), setores = new Set(), salas = new Set(), tiposDisponiveis = new Set(), statusDisponiveis = new Set();
+        
+        const fAndar = inputs.andar.value;
+        const fSetor = inputs.setor.value;
+        const fSala = inputs.sala.value;
+        const fMarca = inputs.marca.value.toLowerCase();
+        const fTipo = inputs.tipo.value.toLowerCase();
+        const fStatus = inputs.status.value;
+        const fCard = filtroCardAtivo ? filtroCardAtivo.toLowerCase() : null;
+        const termo = inputs.search.value.toLowerCase();
+
+        dadosAPI.forEach(d => {
+            const passaAndar = !fAndar || d.andar === fAndar;
+            const passaSetor = !fSetor || d.setor === fSetor;
+            const passaSala = !fSala || d.sala === fSala;
+            const todos = d.todos_equipamentos || [];
+
+            if (todos.length === 0) {
+                if (!fMarca && !fTipo && !fCard && !fStatus) {
+                    if (passaSetor && passaSala && d.andar) andares.add(d.andar);
+                    if (passaAndar && passaSala && d.setor) setores.add(d.setor);
+                    if (passaAndar && passaSetor && d.sala) salas.add(d.sala);
+                }
+                return;
+            }
+
+            todos.forEach(eq => {
+                if (!eq.modelo || eq.modelo === 'NÃO') return;
+                
+                let prefixo = eq.posicao.replace(/[0-9_]/g, '');
+                let nomeTipo = prefixo === 'pc' ? 'computador' : prefixo === 'mon' ? 'monitor' : prefixo;
+                if (prefixo === 'camera') nomeTipo = 'câmera';
+                
+                const passaTipo = !fTipo || nomeTipo === fTipo;
+                const passaCard = !fCard || nomeTipo === fCard;
+                const passaMarca = !fMarca || eq.modelo.toLowerCase().includes(fMarca);
+                
+                const pendente = !eq.patrimonio || eq.patrimonio === "0";
+                const statusDoItem = pendente ? 'verificar' : 'ok';
+                
+                let passaStatus = true;
+                if (fStatus === 'verificar' && !pendente) passaStatus = false;
+                if (fStatus === 'ok' && pendente) passaStatus = false;
+
+                let passaTermo = true;
+                if (termo) {
+                    const estacaoStr = `${d.sala || ''} ${d.setor || ''} ${d.andar || ''} ${d.observacao || ''}`.toLowerCase();
+                    const eqStr = `${eq.modelo || ''} ${eq.patrimonio || ''}`.toLowerCase();
+                    if (!estacaoStr.includes(termo) && !eqStr.includes(termo)) passaTermo = false;
+                }
+
+                if (passaTermo) {
+                    if (passaSetor && passaSala && passaTipo && passaCard && passaMarca && passaStatus) {
+                        if(d.andar) andares.add(d.andar);
+                    }
+                    if (passaAndar && passaSala && passaTipo && passaCard && passaMarca && passaStatus) {
+                        if(d.setor) setores.add(d.setor);
+                    }
+                    if (passaAndar && passaSetor && passaTipo && passaCard && passaMarca && passaStatus) {
+                        if(d.sala) salas.add(d.sala);
+                    }
+                    if (passaAndar && passaSetor && passaSala && passaTipo && passaCard && passaStatus) {
+                        marcas.add(eq.modelo.split(' ')[0].toUpperCase());
+                    }
+                    if (passaAndar && passaSetor && passaSala && passaMarca && passaStatus && (!fCard || nomeTipo === fCard)) {
+                        tiposDisponiveis.add(nomeTipo);
+                    }
+                    if (passaAndar && passaSetor && passaSala && passaTipo && passaCard && passaMarca) {
+                        statusDisponiveis.add(statusDoItem);
+                    }
+                }
+            });
+        });
+
+        atualizarSelectOrdenado(inputs.andar, andares);
+        atualizarSelectOrdenado(inputs.setor, setores);
+        atualizarSelectOrdenado(inputs.sala, salas);
+        atualizarSelectOrdenado(inputs.marca, marcas);
+        
+        const valorTipoAnterior = inputs.tipo.value;
+        inputs.tipo.innerHTML = '<option value="">Todos</option>';
+        Array.from(tiposDisponiveis).sort().forEach(t => inputs.tipo.add(new Option(escapeHTML(t.charAt(0).toUpperCase() + t.slice(1)), escapeHTML(t))));
+        inputs.tipo.value = valorTipoAnterior;
+
+        const valorStatusAnterior = inputs.status.value;
+        inputs.status.innerHTML = '<option value="">Todos</option>';
+        if (statusDisponiveis.has('verificar')) inputs.status.add(new Option('Pendência', 'verificar'));
+        if (statusDisponiveis.has('ok')) inputs.status.add(new Option('Ok', 'ok'));
+        inputs.status.value = valorStatusAnterior;
+    }
+
+    function getSortValue(d, col) {
+        if (col === 'local') return `${d.andar} ${d.setor} ${d.sala}`.toLowerCase();
+        if (col === 'obs') return (d.observacao || '').toLowerCase();
+
+        const todos = d.todos_equipamentos || [];
+        let prefixos = [];
+        if (col === 'pc') prefixos = ['pc'];
+        else if (col === 'notebook') prefixos = ['notebook'];
+        else if (col === 'mon') prefixos = ['mon'];
+        else if (col === 'extras') prefixos = ['impressora', 'camera', 'tv'];
+
+        const itens = todos.filter(e => prefixos.some(p => e.posicao.startsWith(p)) && e.modelo && e.modelo !== 'NÃO');
+        if (itens.length === 0) return '';
+        return itens.map(e => e.modelo).join(' ').toLowerCase();
+    }
+
+    function ordenarTabela(coluna) {
+        if (ordemAtual.coluna === coluna) {
+            ordemAtual.asc = !ordemAtual.asc;
+        } else {
+            ordemAtual.coluna = coluna;
+            ordemAtual.asc = true;
+        }
+        
+        document.querySelectorAll('.sort-icon').forEach(icon => {
+            icon.classList.remove('sort-active', 'sort-asc');
+        });
+        
+        const iconAtivo = document.getElementById(`sort-icon-${coluna}`);
+        if (iconAtivo) {
+            iconAtivo.classList.add('sort-active');
+            if (!ordemAtual.asc) iconAtivo.classList.add('sort-asc');
+        }
+
+        atualizarTabela();
+    }
+
+    function atualizarTabela() {
+        const termo = inputs.search.value.toLowerCase();
+        const fMarca = inputs.marca.value.toLowerCase();
+        const fTipo = inputs.tipo.value.toLowerCase();
+        const fStatus = inputs.status.value;
+        const fAndar = inputs.andar.value;
+        const fSetor = inputs.setor.value;
+        const fSala = inputs.sala.value;
+        const fCard = filtroCardAtivo ? filtroCardAtivo.toLowerCase() : null;
+
+        dadosAtuais = dadosAPI.filter(d => {
+            if(fAndar && d.andar !== fAndar) return false;
+            if(fSetor && d.setor !== fSetor) return false;
+            if(fSala && d.sala !== fSala) return false;
+
+            const todos = d.todos_equipamentos || [];
+            
+            let hasMatchingEquip = false;
+            for (let eq of todos) {
+                if (equipamentoPassaFiltro(eq, d, fTipo, fMarca, fStatus, fCard, termo)) {
+                    hasMatchingEquip = true;
+                    break;
+                }
+            }
+            
+            if ((fMarca || fTipo || fStatus || fCard || termo) && !hasMatchingEquip) {
+                if (termo && !fMarca && !fTipo && !fStatus && !fCard) {
+                     const estacaoStr = `${d.sala || ''} ${d.setor || ''} ${d.andar || ''} ${d.observacao || ''}`.toLowerCase();
+                     if (estacaoStr.includes(termo)) return true;
+                }
+                return false;
+            }
+
+            return true;
+        });
+
+        dadosAtuais.sort((a, b) => {
+            if (ordemAtual.coluna === 'local') {
+                const andares = Object.keys(hierarquiaLocais);
+                const idxA = andares.indexOf(a.andar);
+                const idxB = andares.indexOf(b.andar);
+                const cmpAndar = idxA !== idxB ? (idxA - idxB) : 0;
+                
+                if (cmpAndar !== 0) return ordemAtual.asc ? cmpAndar : -cmpAndar;
+
+                const cmpSetor = (a.setor || '').localeCompare(b.setor || '');
+                if (cmpSetor !== 0) return ordemAtual.asc ? cmpSetor : -cmpSetor;
+
+                const numA = parseInt((a.sala || '').match(/\d+/) || [0], 10);
+                const numB = parseInt((b.sala || '').match(/\d+/) || [0], 10);
+                return ordemAtual.asc ? (numA - numB) : (numB - numA);
+            } else {
+                const valA = getSortValue(a, ordemAtual.coluna);
+                const valB = getSortValue(b, ordemAtual.coluna);
+                if (valA < valB) return ordemAtual.asc ? -1 : 1;
+                if (valA > valB) return ordemAtual.asc ? 1 : -1;
+                return 0;
+            }
+        });
+
+        atualizarCards(dadosAtuais, fTipo, fMarca, fStatus, fCard, termo);
+        renderizar(dadosAtuais, fTipo, fMarca, fStatus, fCard, termo);
+    }
+
+    function atualizarCards(lista, fTipo, fMarca, fStatus, fCard, termo) {
+        const container = document.getElementById("statCardsContainer");
+        const counts = { Computador: 0, Notebook: 0, Monitor: 0, TV: 0, Impressora: 0, Câmera: 0 };
+        const icons = { Computador: 'fa-desktop', Notebook: 'fa-laptop', Monitor: 'fa-tv', TV: 'fa-display', Impressora: 'fa-print', Câmera: 'fa-video' };
+
+        lista.forEach(d => {
+            const todos = d.todos_equipamentos || [];
+            todos.forEach(eq => {
+                if (equipamentoPassaFiltro(eq, d, fTipo, fMarca, fStatus, fCard, termo)) {
+                    if (eq.posicao.startsWith('pc')) counts.Computador++;
+                    else if (eq.posicao.startsWith('notebook')) counts.Notebook++;
+                    else if (eq.posicao.startsWith('mon')) counts.Monitor++;
+                    else if (eq.posicao.startsWith('tv')) counts.TV++;
+                    else if (eq.posicao.startsWith('impressora')) counts.Impressora++;
+                    else if (eq.posicao.startsWith('camera')) counts.Câmera++;
+                }
+            });
+        });
+
+        container.innerHTML = '';
+        ['Computador', 'Notebook', 'Monitor', 'TV', 'Impressora', 'Câmera'].forEach(label => {
+            const total = counts[label];
+            const isActive = filtroCardAtivo === label;
+            const isDisabled = (total === 0 && !isActive);
+            
+            let nomeExibicao = formatTextQtd(label, total).replace(/[0-9]/g, '').trim(); 
+            nomeExibicao = nomeExibicao.charAt(0).toUpperCase() + nomeExibicao.slice(1);
+            if (total === 0) nomeExibicao = getLabelPlural(label);
+
+            container.innerHTML += `
+                <div class="stat-card ${isActive ? 'active' : ''} ${isDisabled ? 'disabled' : ''}" ${isDisabled ? '' : `onclick="toggleFiltroCard('${label}')"`}>
+                    ${isDisabled ? '' : `<button class="btn-info-card" onclick="abrirDetalhesCard('${label}', event)" title="Onde estão?"><i class="fas fa-info-circle"></i></button>`}
+                    <div class="stat-icon"><i class="fas ${icons[label]}"></i></div>
+                    <div class="stat-info"><h3>${total}</h3></div>
+                    <p style="font-size: 0.75rem; margin: 0; color: var(--text-muted); font-weight: 700; text-transform: uppercase; word-break: break-word; width: 100%; text-align: left;">${nomeExibicao}</p>
+                </div>`;
+        });
+    }
+
+    function renderizar(lista, fTipo, fMarca, fStatus, fCard, termo) {
+        const tbody = document.getElementById("inventarioTable");
+        tbody.innerHTML = '';
+        
+        lista.forEach(d => {
+            const tr = document.createElement('tr');
+            const todos = d.todos_equipamentos || [];
+            
+            const renderCell = (prefixos, defaultIcon = null) => {
+                const itens = todos.filter(e => prefixos.some(p => e.posicao.startsWith(p)) && e.modelo && e.modelo !== 'NÃO' && equipamentoPassaFiltro(e, d, fTipo, fMarca, fStatus, fCard, termo));
+                
+                if (itens.length === 0) return `<span class="vazio-dash" style="color:#cbd5e1">--</span>`;
+                return itens.map(eq => {
+                    const safePat = escapeHTML(eq.patrimonio);
+                    const safeModelo = escapeHTML(eq.modelo);
+                    
+                    const badge = (eq.patrimonio && eq.patrimonio !== "0") ? `<span class="patrimonio-badge">${safePat}</span>` : `<span class="patrimonio-missing">PENDENTE</span>`;
+                    
+                    let dynIcon = defaultIcon;
+                    if (!dynIcon) {
+                        if (eq.posicao.startsWith('impressora')) dynIcon = 'fa-print';
+                        else if (eq.posicao.startsWith('camera')) dynIcon = 'fa-video';
+                        else if (eq.posicao.startsWith('tv')) dynIcon = 'fa-tv';
+                        else dynIcon = 'fa-plug';
+                    }
+
+                    return `<div style="margin-bottom:6px;"><div class="asset-name"><i class="fas ${dynIcon} asset-icon"></i> ${safeModelo}</div>${badge}</div>`;
+                }).join('');
+            };
+
+            const pcCell = renderCell(['pc'], 'fa-desktop');
+            const noteCell = renderCell(['notebook'], 'fa-laptop');
+            const monCell = renderCell(['mon'], 'fa-tv');
+            const extrasCell = renderCell(['impressora', 'camera', 'tv']);
+            const obsContent = d.observacao ? escapeHTML(d.observacao) : '<span class="vazio-dash" style="color:#cbd5e1">--</span>';
+
+            tr.innerHTML = `
+                <td class="td-local">
+                    <span class="setor-tag">${escapeHTML(d.setor)}</span>
+                    <span class="andar-tag">${escapeHTML(d.andar)} - ${escapeHTML(d.sala)}</span>
+                </td>
+                <td class="${pcCell.includes('--') ? 'td-mobile-empty' : ''}"><div class="mobile-label">Computador(es)</div>${pcCell}</td>
+                <td class="${noteCell.includes('--') ? 'td-mobile-empty' : ''}"><div class="mobile-label">Notebook(s)</div>${noteCell}</td>
+                <td class="${monCell.includes('--') ? 'td-mobile-empty' : ''}"><div class="mobile-label">Monitor(es)</div>${monCell}</td>
+                <td class="${extrasCell.includes('--') ? 'td-mobile-empty' : ''}"><div class="mobile-label">Extras / Acessórios</div>${extrasCell}</td>
+                <td class="${obsContent.includes('--') ? 'td-mobile-empty' : ''}"><div class="mobile-label">Observações</div><div style="font-size:0.85rem; color:#64748b;">${obsContent}</div></td>
+            `;
+            tr.onclick = () => abrirModalItem(d);
+            tbody.appendChild(tr);
+        });
+    }
+
+    function fecharTodosOsFormularios() {
+        document.querySelectorAll('.form-add-novo').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('[id^="edit-pat-"]').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('[id^="view-pat-"]').forEach(el => el.style.display = 'block');
+    }
+
+    function toggleFormNovo(prefixo) {
+        const form = document.getElementById(`form-novo-${prefixo}`);
+        const estavaAberto = form.style.display === 'flex';
+        fecharTodosOsFormularios();
+        if (!estavaAberto) {
+            form.style.display = 'flex';
+        }
+    }
+
+    function toggleFormRemover(posicao) {
+        const form = document.getElementById(`form-rm-${posicao}`);
+        const estavaAberto = form.style.display === 'flex';
+        fecharTodosOsFormularios();
+        if (!estavaAberto) {
+            form.style.display = 'flex';
+        }
+    }
+
+    function toggleEditPat(posicao) {
+        const editDiv = document.getElementById(`edit-pat-${posicao}`);
+        const viewDiv = document.getElementById(`view-pat-${posicao}`);
+        const estavaAberto = editDiv.style.display === 'flex';
+        fecharTodosOsFormularios();
+        if (!estavaAberto) {
+            viewDiv.style.display = 'none';
+            editDiv.style.display = 'flex';
+            document.getElementById(`input-pat-${posicao}`).focus();
+        }
+    }
+
+    function checarMotivo(posicao) {
+        const select = document.getElementById(`select-rm-${posicao}`);
+        const inputOutro = document.getElementById(`input-rm-outro-${posicao}`);
+        const selectEstoque = document.getElementById(`select-estoque-${posicao}`);
+
+        inputOutro.style.display = 'none';
+        selectEstoque.style.display = 'none';
+        inputOutro.style.borderColor = '#fecaca';
+
+        if(select.value === 'outro') {
+            inputOutro.style.display = 'block';
+            inputOutro.focus();
+        } else if (select.value === 'substituicao') {
+            selectEstoque.style.display = 'block'; 
+        }
+    }
+
+    function verificarOutroEquipModal(prefixo) {
+        const sel = document.getElementById(`novo-mod-${prefixo}`);
+        const inputOutro = document.getElementById(`novo-mod-outro-${prefixo}`);
+        inputOutro.style.borderColor = '#e2e8f0';
+        
+        if (sel.value === 'outro') {
+            inputOutro.style.display = 'block';
+            inputOutro.focus();
+        } else {
+            inputOutro.style.display = 'none';
+            inputOutro.value = '';
+        }
+    }
+
+    function renderBlocoModal(idEstacao, todos, prefixo, icon, tituloBloco) {
+        let tipoMapeado = prefixo;
+        if (prefixo.startsWith('pc')) tipoMapeado = 'pc';
+        else if (prefixo.startsWith('note')) tipoMapeado = 'notebook';
+        else if (prefixo.startsWith('mon')) tipoMapeado = 'mon';
+        else if (prefixo.startsWith('tv')) tipoMapeado = 'tv';
+        else if (prefixo.startsWith('impressora')) tipoMapeado = 'impressora';
+        else if (prefixo.startsWith('camera')) tipoMapeado = 'camera';
+        
+        let arrayEstoque = estoqueReal[tipoMapeado] || [];
+        
+        const itens = todos.filter(e => e.posicao.startsWith(prefixo) && e.modelo && e.modelo !== 'NÃO');
+        
+        let htmlItens = itens.length === 0 
+            ? '<div style="padding:5px; color:#cbd5e1; font-style:italic; font-size: 0.8rem;">Nenhum cadastrado</div>' 
+            : itens.map(eq => renderEditRow(eq, icon, idEstacao, eq.posicao, tituloBloco, arrayEstoque)).join('');
+
+        let tituloExibicao = tituloBloco;
+        if (itens.length > 1) {
+            tituloExibicao = getLabelPlural(tituloBloco);
+        }
+
+        let optionsHTML = '<option value="">Selecione do Estoque...</option>';
+        if (arrayEstoque) {
+            arrayEstoque.forEach(item => {
+                optionsHTML += `<option value="${escapeHTML(item.modelo)}">${escapeHTML(item.modelo)} (Qtd: ${item.qtd})</option>`;
+            });
+        }
+        optionsHTML += '<option value="outro">Outro modelo (Manual)...</option>';
+
+        return `
+        <div class="edit-block">
+            <div class="edit-block-title">
+                ${tituloExibicao}
+                <button class="btn-add-mini" onclick="toggleFormNovo('${prefixo}')"><i class="fas fa-plus"></i> Novo</button>
+            </div>
+            ${htmlItens}
+            
+            <div id="form-novo-${prefixo}" class="form-add-novo" style="display:none; flex-direction: column;">
+                <div class="form-add-linha">
+                    <div style="flex: 1; min-width: 180px;">
+                        <select id="novo-mod-${prefixo}" class="input-mini" style="width: 100%; margin-bottom: 5px;" onchange="verificarOutroEquipModal('${prefixo}')">
+                            ${optionsHTML}
+                        </select>
+                        <input type="text" id="novo-mod-outro-${prefixo}" placeholder="Qual o modelo?" class="input-mini" style="display:none; width: 100%;">
+                    </div>
+                    
+                    <div class="pat-input-wrapper">
+                        <div class="pat-input-group">
+                            <input type="text" id="novo-pat-${prefixo}" placeholder="Patrimônio (Opc)" class="pat-input"
+                                   oninput="validarPatrimonioEmTempoReal(this, 'btn-sv-novo-${prefixo}', 'msg-novo-pat-${prefixo}', '')"
+                                   onkeypress="if(event.key === 'Enter') salvarNovoEquipamento(${idEstacao}, '${prefixo}')">
+                            <button id="btn-sv-novo-${prefixo}" class="btn-save-pat" onclick="salvarNovoEquipamento(${idEstacao}, '${prefixo}')">
+                                <i class="fas fa-save"></i>
+                            </button>
+                        </div>
+                        <div id="msg-novo-pat-${prefixo}" class="pat-error-msg"></div>
+                    </div>
+                </div>
+                <!-- 🚀 CAMPO DE OBSERVAÇÃO PARA ADIÇÃO (NOVO) -->
+                <div class="pat-input-wrapper" style="width: 100%; margin-top: 5px;">
+                    <input type="text" id="novo-motivo-${prefixo}" placeholder="Motivo / Ação (Opcional - Ex: Instalação a pedido da diretoria)" class="input-mini" style="width: 100%;">
+                </div>
+            </div>
+        </div>`;
+    }
+
+    function renderEditRow(eq, icon, idEstacao, posicaoChave, tipoTitulo, arrayEstoque) {
+        const isPendente = !eq.patrimonio || eq.patrimonio === "0" || eq.patrimonio.startsWith('0_temp');
+        const btnId = `btn-save-${posicaoChave}-${idEstacao}`;
+        const msgId = `msg-pat-${posicaoChave}-${idEstacao}`;
+        
+        const safeModeloHTML = escapeHTML(eq.modelo);
+        const safePatHTML = escapeHTML(eq.patrimonio);
+        
+        const safeModeloJS = escapeJS(eq.modelo);
+        const safePatJS = escapeJS(eq.patrimonio);
+        const patAtualJS = isPendente ? '' : escapeJS(eq.patrimonio);
+        
+        let patArea;
+        
+        if (isPendente) {
+            patArea = `
+            <div class="pat-input-wrapper">
+                <div class="pat-input-group">
+                    <input type="text" id="input-pat-${posicaoChave}" class="pat-input" placeholder="Novo PAT" 
+                           oninput="validarPatrimonioEmTempoReal(this, '${btnId}', '${msgId}', '')"
+                           onkeypress="if(event.key === 'Enter') salvarNovoPatrimonio(${idEstacao}, '${posicaoChave}', '${safeModeloJS}', '${tipoTitulo}', '')">
+                    <button id="${btnId}" class="btn-save-pat" onclick="salvarNovoPatrimonio(${idEstacao}, '${posicaoChave}', '${safeModeloJS}', '${tipoTitulo}', '')"><i class="fas fa-save"></i></button>
+                </div>
+                <div id="${msgId}" class="pat-error-msg"></div>
+            </div>`;
+        } else {
+            patArea = `
+            <div class="pat-input-wrapper" id="view-pat-${posicaoChave}">
+                <div style="display:flex; gap:5px; align-items:center;">
+                    <span class="patrimonio-badge" style="margin-top: 0;">${safePatHTML}</span>
+                    <button class="btn-save-pat" style="background: #f1f5f9; color: var(--text-muted); border: 1px solid #e2e8f0;" onclick="toggleEditPat('${posicaoChave}')" title="Editar Patrimônio">
+                        <i class="fas fa-pen" style="font-size: 0.6rem;"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="pat-input-wrapper" id="edit-pat-${posicaoChave}" style="display:none;">
+                <div class="pat-input-group">
+                    <input type="text" id="input-pat-${posicaoChave}" class="pat-input" value="${safePatHTML}" placeholder="Novo PAT" 
+                           oninput="validarPatrimonioEmTempoReal(this, '${btnId}', '${msgId}', '${patAtualJS}')"
+                           onkeypress="if(event.key === 'Enter') salvarNovoPatrimonio(${idEstacao}, '${posicaoChave}', '${safeModeloJS}', '${tipoTitulo}', '${patAtualJS}')">
+                    <button id="${btnId}" class="btn-save-pat" style="background: var(--warning-color);" onclick="salvarNovoPatrimonio(${idEstacao}, '${posicaoChave}', '${safeModeloJS}', '${tipoTitulo}', '${patAtualJS}')"><i class="fas fa-save"></i></button>
+                    <button class="btn-save-pat" style="background: #cbd5e1;" onclick="toggleEditPat('${posicaoChave}')"><i class="fas fa-times"></i></button>
+                </div>
+                <div id="${msgId}" class="pat-error-msg"></div>
+            </div>`;
+        }
+
+        let optionsEstoque = '<option value="">(Selecione um substituto...)</option>';
+        if(arrayEstoque && arrayEstoque.length > 0) {
+            arrayEstoque.forEach(item => {
+                optionsEstoque += `<option value="${escapeHTML(item.modelo)}">${escapeHTML(item.modelo)} (Qtd: ${item.qtd})</option>`;
+            });
+        } else {
+            optionsEstoque = '<option value="">(Estoque vazio para este tipo)</option>';
+        }
+
+        return `
+            <div class="item-edit-row">
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    
+                    <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; flex: 1;">
+                        <div class="item-info" style="min-width: 180px;">
+                            <div class="item-name" style="margin-bottom: 0;"><i class="fas ${icon}"></i> ${safeModeloHTML}</div>
+                        </div>
+                        ${patArea}
+                    </div>
+                    
+                    <button class="btn-save-pat" style="background: transparent; border: 1px solid var(--error-color); color: var(--error-color); flex-shrink: 0; margin-left: 10px;" onclick="toggleFormRemover('${posicaoChave}')" title="Remover Equipamento">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    
+                </div>
+                
+                <div id="form-rm-${posicaoChave}" class="form-add-novo" style="display:none; background: #fef2f2; border-color: #fecaca; margin-top: 10px; flex-direction: column; gap: 8px;">
+                    <div style="font-size: 0.8rem; color: var(--error-color); font-weight: 700; width: 100%;">Ação / Remoção:</div>
+                    
+                    <div class="form-add-linha" style="display: flex; gap: 5px; width: 100%;">
+                        <select id="select-rm-${posicaoChave}" class="input-mini" style="border-color: #fecaca; flex: 1;" onchange="checarMotivo('${posicaoChave}')">
+                            <option value="">Selecione o motivo...</option>
+                            <option value="defeito">Equipamento com defeito</option>
+                            <option value="substituicao">Substituição</option>
+                            <option value="estoque">Devolução ao estoque</option>
+                            <option value="outro">Outro motivo...</option>
+                        </select>
+                        <button id="btn-rm-${posicaoChave}" class="btn-save-pat" style="background: var(--error-color); flex-shrink: 0;" onclick="confirmarRemocao(${idEstacao}, '${posicaoChave}', '${safeModeloJS}', '${safePatJS}', '${tipoTitulo}')">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                    
+                    <input type="text" id="input-rm-outro-${posicaoChave}" class="input-mini" style="display:none; border-color: #fecaca; width: 100%; margin-top: 5px;" placeholder="Digite o motivo...">
+                    
+                    <select id="select-estoque-${posicaoChave}" class="input-mini" style="display:none; border-color: var(--primary-color); width: 100%; margin-top: 5px;">
+                        ${optionsEstoque}
+                    </select>
+                </div>
+            </div>`;
+    }
+
+    async function confirmarRemocao(idEstacao, posicao, modelo, patrimonio, tipoTitulo) {
+        const select = document.getElementById(`select-rm-${posicao}`);
+        const inputOutro = document.getElementById(`input-rm-outro-${posicao}`);
+        const selectEstoque = document.getElementById(`select-estoque-${posicao}`);
+        const btn = document.getElementById(`btn-rm-${posicao}`);
+        const abaAtual = document.querySelector('.tab-content.active').id;
+
+        inputOutro.style.borderColor = '#fecaca';
+
+        let motivo = select.value;
+        let obs_motivo = '';
+        let modelo_substituto = '';
+
+        if (!motivo) {
+            mostrarNotificacao("Por favor, selecione a ação.", "warning");
+            return;
+        }
+
+        if (motivo === 'outro') {
+            if (!inputOutro.value.trim()) { 
+                inputOutro.style.borderColor = 'var(--error-color)';
+                mostrarNotificacao("Por favor, digite o motivo.", "warning"); 
+                return; 
+            }
+            obs_motivo = inputOutro.value.trim();
+        }
+
+        if (motivo === 'substituicao') {
+            modelo_substituto = selectEstoque.value;
+            if (!modelo_substituto) {
+                mostrarNotificacao("Selecione um equipamento substituto no estoque.", "warning");
+                return;
+            }
+        }
+
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; }
+
+        try {
+            const resposta = await apiFetch('/api/remover-equipamento', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    id_estacao: idEstacao, 
+                    posicao: posicao, 
+                    modelo: modelo, 
+                    patrimonio: patrimonio, 
+                    motivo: motivo, 
+                    obs_motivo: obs_motivo,
+                    tipo: tipoTitulo,
+                    modelo_substituto: modelo_substituto 
+                })
+            });
+
+            if (resposta.ok) {
+                mostrarNotificacao('Ação concluída com sucesso!', 'success');
+                
+                await carregarEstoqueReal();
+                await carregarDadosDaAPI();
+                
+                const estacaoAtualizada = dadosAPI.find(est => est.id === idEstacao);
+                if (estacaoAtualizada) {
+                    abrirModalItem(estacaoAtualizada, abaAtual); 
+                } else {
+                    toggleModal('itemModal', false);
+                }
+
+                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check"></i>'; }
+            } else {
+                const erro = await resposta.json();
+                mostrarNotificacao(erro.erro || 'Erro na operação.', 'error');
+                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check"></i>'; }
+            }
+        } catch (erro) {
+            if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check"></i>'; }
+        }
+    }
+
+    function abrirModalItem(d, abaAtiva = 'tab-equip') {
+        const todos = d.todos_equipamentos || [];
+
+        let equipPrincipal = null;
+        const pc = todos.find(e => e.posicao.startsWith('pc') && e.modelo && e.modelo !== 'NÃO');
+        const note = todos.find(e => e.posicao.startsWith('notebook') && e.modelo && e.modelo !== 'NÃO');
+        const mon = todos.find(e => e.posicao.startsWith('mon') && e.modelo && e.modelo !== 'NÃO');
+
+        if (pc) equipPrincipal = pc;
+        else if (note) equipPrincipal = note;
+        else if (mon) equipPrincipal = mon;
+
+        let tituloText = `Sala ${escapeHTML(d.sala)}`;
+        if (equipPrincipal) {
+            const patText = (!equipPrincipal.patrimonio || equipPrincipal.patrimonio === '0' || equipPrincipal.patrimonio.startsWith('0_temp')) ? 'Pendente' : equipPrincipal.patrimonio;
+            tituloText = `${escapeHTML(equipPrincipal.modelo)} - PAT: ${escapeHTML(patText)}`;
+        }
+
+        document.getElementById("modalTitle").innerText = tituloText;
+        document.getElementById("modalContext").innerText = `${escapeHTML(d.andar)} / ${escapeHTML(d.setor)} - Sala ${escapeHTML(d.sala)}`;
+        
+        const obsDiv = document.getElementById("modalObs");
+        if (d.observacao && d.observacao.trim() !== '') {
+            obsDiv.innerHTML = `<i class="fas fa-info-circle"></i> Obs: ${escapeHTML(d.observacao)}`;
+            obsDiv.style.display = 'block';
+        } else {
+            obsDiv.style.display = 'none';
+            obsDiv.innerHTML = '';
+        }
+
+        let historicoHTML = '<p style="color:#94a3b8; font-size:0.8rem; font-style: italic;">Nenhum histórico recente para esta estação.</p>';
+        if (d.historico && d.historico.length > 0) {
+            historicoHTML = d.historico.map(h => `<div class="timeline-item"><div class="timeline-date">${escapeHTML(h.data_acao || h.data)}</div><div class="timeline-content">${escapeHTML(h.acao)}</div></div>`).join('');
+        }
+
+        document.getElementById("modalBody").innerHTML = `
+            <div id="tab-equip" class="tab-content ${abaAtiva === 'tab-equip' ? 'active' : ''}">
+                ${renderBlocoModal(d.id, todos, 'pc', 'fa-desktop', 'Computador')}
+                ${renderBlocoModal(d.id, todos, 'notebook', 'fa-laptop', 'Notebook')}
+                ${renderBlocoModal(d.id, todos, 'mon', 'fa-tv', 'Monitor')}
+            </div>
+            <div id="tab-acessorios" class="tab-content ${abaAtiva === 'tab-acessorios' ? 'active' : ''}">
+                ${renderBlocoModal(d.id, todos, 'impressora', 'fa-print', 'Impressora')}
+                ${renderBlocoModal(d.id, todos, 'camera', 'fa-video', 'Câmera')}
+                ${renderBlocoModal(d.id, todos, 'tv', 'fa-tv', 'TV')}
+            </div>
+            <div id="tab-hist" class="tab-content ${abaAtiva === 'tab-hist' ? 'active' : ''}">
+                <div class="timeline">${historicoHTML}</div>
+            </div>`;
+
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`btn-${abaAtiva}`).classList.add('active');
+
+        toggleModal('itemModal', true);
+    }
+
+    async function salvarNovoEquipamento(idEstacao, prefixo) {
+        const selectMod = document.getElementById(`novo-mod-${prefixo}`);
+        const inputModOutro = document.getElementById(`novo-mod-outro-${prefixo}`);
+        inputModOutro.style.borderColor = '#e2e8f0';
+
+        let modelo = selectMod.value;
+        if (modelo === 'outro') {
+            modelo = inputModOutro.value.trim();
+            if(!modelo) {
+                inputModOutro.style.borderColor = 'var(--error-color)';
+                mostrarNotificacao("Por favor, digite o modelo do equipamento.", "warning"); 
+                return;
+            }
+        }
+        
+        const inputPat = document.getElementById(`novo-pat-${prefixo}`);
+        const btn = document.getElementById(`btn-sv-novo-${prefixo}`);
+        const abaAtual = document.querySelector('.tab-content.active').id;
+
+        if (btn.disabled) return;
+        const patrimonio = inputPat.value.trim();
+
+        // 🚀 LENDO O NOVO CAMPO DE MOTIVO/AÇÃO
+        const inputMotivo = document.getElementById(`novo-motivo-${prefixo}`);
+        let motivoText = inputMotivo ? inputMotivo.value.trim() : '';
+
+        if(!modelo) { mostrarNotificacao("Você precisa selecionar ou digitar o modelo.", "warning"); return; }
+        if(patrimonio && encontrarLocalPatrimonio(patrimonio)) { mostrarNotificacao("Patrimônio já em uso!", "error"); return; }
+
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+        const tipoApresentacao = prefixo === 'pc' ? 'Computador' : prefixo === 'mon' ? 'Monitor' : prefixo.charAt(0).toUpperCase() + prefixo.slice(1);
+        
+        // Formata o histórico com ou sem o motivo
+        let acaoTexto = `Adicionou ${tipoApresentacao} (${modelo}) à estação`;
+        if (motivoText) {
+            acaoTexto = `[Motivo: ${motivoText}] ` + acaoTexto;
+        }
+
+        try {
+            const resposta = await apiFetch('/api/adicionar-equipamento', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id_estacao: idEstacao, tipo: prefixo, modelo: modelo, patrimonio: patrimonio, acao: acaoTexto })
+            });
+
+            if (resposta.ok) {
+                mostrarNotificacao('Equipamento adicionado com sucesso!', 'success');
+                
+                await carregarEstoqueReal();
+                await carregarDadosDaAPI();
+                
+                const estacaoAtualizada = dadosAPI.find(est => est.id === idEstacao);
+                if (estacaoAtualizada) abrirModalItem(estacaoAtualizada, abaAtual); 
+            } else {
+                const erro = await resposta.json();
+                mostrarNotificacao(erro.erro || 'Erro ao salvar.', 'error');
+                btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i>';
+            }
+        } catch (erro) {
+            btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i>';
+        }
+    }
+
+    function encontrarLocalPatrimonio(patrimonioDigitado) {
+        if (patrimonioDigitado === "0" || patrimonioDigitado.startsWith("0_temp")) return null; 
+        
+        for (let d of dadosAPI) {
+            for (let eq of (d.todos_equipamentos || [])) {
+                if (eq.patrimonio === patrimonioDigitado) {
+                    let prefixo = eq.posicao.replace(/[0-9_]/g, '');
+                    let nomeTipo = prefixo === 'pc' ? 'Computador' : prefixo === 'mon' ? 'Monitor' : prefixo.charAt(0).toUpperCase() + prefixo.slice(1);
+                    if (prefixo === 'camera') nomeTipo = 'Câmera';
+                    
+                    return `${nomeTipo} (${d.setor} - Sala ${d.sala})`;
+                }
+            }
+        }
+        return null;
+    }
+
+    function validarPatrimonioEmTempoReal(inputEl, btnId, msgId, patAtual) {
+        inputEl.value = inputEl.value.replace(/[^0-9]/g, '');
+        const val = inputEl.value.trim(), btn = document.getElementById(btnId), msg = document.getElementById(msgId);
+        
+        if (!val || val === patAtual) { 
+            inputEl.style.borderColor = "#e2e8f0"; inputEl.style.backgroundColor = "#f8fafc"; msg.style.display = 'none'; 
+        } else {
+            const localUso = encontrarLocalPatrimonio(val);
+            if (localUso) { 
+                inputEl.style.borderColor = "var(--error-color)"; inputEl.style.backgroundColor = "#fef2f2"; 
+                msg.innerText = `Em uso: ${localUso}`; msg.style.display = 'block'; 
+            } else { 
+                inputEl.style.borderColor = "var(--success-color)"; inputEl.style.backgroundColor = "#ecfdf5"; 
+                msg.style.display = 'none';
+            }
+        }
+
+        if (btn) {
+            const hasErrors = Array.from(document.querySelectorAll('.pat-error-msg')).some(el => el.style.display === 'block');
+            btn.disabled = hasErrors;
+        }
+    }
+
+    async function salvarNovoPatrimonio(idEstacao, posicao, nomeModelo, tipoApresentacao, patAtual) {
+        const btnId = `btn-save-${posicao}-${idEstacao}`;
+        const btnEl = document.getElementById(btnId);
+        const abaAtual = document.querySelector('.tab-content.active').id;
+
+        if (btnEl && btnEl.disabled) return; 
+
+        const inputEl = document.getElementById(`input-pat-${posicao}`);
+        const novoPatrimonio = inputEl.value.trim();
+
+        if (novoPatrimonio === patAtual && patAtual !== '') {
+            toggleEditPat(posicao);
+            return;
+        }
+
+        if (!novoPatrimonio) { mostrarNotificacao("Por favor, digite o patrimônio.", "warning"); return; }
+        if (encontrarLocalPatrimonio(novoPatrimonio)) { mostrarNotificacao("Patrimônio já em uso!", "error"); return; }
+
+        if (btnEl) { btnEl.disabled = true; btnEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; }
+
+        const acaoTexto = patAtual 
+            ? `Atualizou o Patrimônio de ${patAtual} para ${novoPatrimonio} em ${tipoApresentacao} (${nomeModelo})` 
+            : `Vinculou o Patrimônio ${novoPatrimonio} em ${tipoApresentacao} (${nomeModelo})`;
+
+        try {
+            const resposta = await apiFetch('/api/atualizar', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id_estacao: idEstacao, posicao: posicao, patrimonio: novoPatrimonio, acao: acaoTexto })
+            });
+
+            if (resposta.ok) {
+                mostrarNotificacao('Patrimônio atualizado com sucesso!', 'success');
+                await carregarDadosDaAPI();
+                const estacaoAtualizada = dadosAPI.find(est => est.id === idEstacao);
+                if (estacaoAtualizada) abrirModalItem(estacaoAtualizada, abaAtual); 
+            } else {
+                const erro = await resposta.json();
+                mostrarNotificacao(erro.erro || 'O servidor recusou a requisição.', 'error');
+                if (btnEl) { btnEl.disabled = false; btnEl.innerHTML = '<i class="fas fa-save"></i>'; }
+            }
+        } catch (erro) {
+            if (btnEl) { btnEl.disabled = false; btnEl.innerHTML = '<i class="fas fa-save"></i>'; }
+        }
+    }
+
+    function toggleModal(id, show) { document.getElementById(id).classList[show ? 'add' : 'remove']("visible"); }
+    
+    function switchTab(tabId) { 
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); 
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); 
+        document.getElementById(tabId).classList.add('active'); 
+        document.getElementById(`btn-${tabId}`).classList.add('active'); 
+    }
+</script>
+</body>
+</html>
