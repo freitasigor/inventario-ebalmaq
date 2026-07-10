@@ -21,7 +21,7 @@ Siga os passos abaixo para testar o projeto na sua máquina:
 
 1. Clone este repositório:
 ```bash
-git clone [https://github.com/freitasigor/inventario-ebalmaq.git](https://github.com/freitasigor/inventario-ebalmaq.git)
+git clone https://github.com/freitasigor/inventario-ebalmaq.git
 ```
 
 2. Acesse a pasta do projeto no seu terminal:
