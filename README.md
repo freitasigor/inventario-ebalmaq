@@ -26,6 +26,7 @@ A documentação completa do sistema, incluindo requisitos e regras de negócio,
 Antes de começar, certifique-se de ter as seguintes ferramentas instaladas na sua máquina:
 * [Git](https://git-scm.com) (Para clonar o repositório)
 * [Node.js](https://nodejs.org/pt-br) (Que já inclui o gerenciador de pacotes `npm`)
+* [VS Code](https://code.visualstudio.com/) (Opcional: Recomendado para visualizar e editar o código)
 
 ## 🚀 Como rodar o projeto localmente
 
