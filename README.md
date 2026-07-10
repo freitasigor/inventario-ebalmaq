@@ -1,5 +1,5 @@
 # Sistema de Inventário Ebalmaq 📦
-
+![Tela Inicial do Sistema](img/inicial-ebalmaq.png)
 Um sistema web responsivo desenvolvido para gestão e controle de inventário de patrimônios e estoque. Este projeto foi estruturado para ser leve, ágil e de fácil navegação.
 
 ## 💻 Tecnologias Utilizadas
