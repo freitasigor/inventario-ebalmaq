@@ -12,7 +12,7 @@ const porta = 3000;
 // ==============================================================
 // ⚙️ CONFIGURAÇÃO DE AMBIENTE E BANCO DE DADOS
 // ==============================================================
-const MODO_TESTE = false; 
+const MODO_TESTE = true; 
 
 /*const db = new sqlite3.Database('./inventario.db');*/
 const db = new sqlite3.Database('C:\\Users\\ifdesilva\\Documents\\ebalmaq-github\\inventario_github.db');
