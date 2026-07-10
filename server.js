@@ -520,7 +520,7 @@ app.post('/api/adicionar-inventario-completo', (req, res) => {
 });
 
 app.listen(porta, '0.0.0.0', () => {
-    console.log(`📡 Servidor liberado para rede local na porta ${porta}! Acesse via http://10.182.104.1:${porta}`);
+    console.log(`📡 Servidor liberado para rede local na porta ${porta}! Acesse via http://localhost:${porta}`);
     console.log(`🚀 Servidor Ebalmaq AUTENTICAÇÃO VIA TOKEN! (Com Banco Blindado e Anticolisão)`);
     console.log(`🔧 MODO_TESTE está configurado como: ${MODO_TESTE ? 'ATIVADO' : 'DESATIVADO'}`);
 });
