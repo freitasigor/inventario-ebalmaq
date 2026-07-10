@@ -21,6 +21,12 @@ A documentação completa do sistema, incluindo requisitos e regras de negócio,
 * Sistema de importação de dados em massa via arquivos CSV.
 * Identificação automática de patrimônios duplicados.
 
+## ⚠️ Pré-requisitos
+
+Antes de começar, certifique-se de ter as seguintes ferramentas instaladas na sua máquina:
+* [Git](https://git-scm.com) (Para clonar o repositório)
+* [Node.js](https://nodejs.org/pt-br) (Que já inclui o gerenciador de pacotes `npm`)
+
 ## 🚀 Como rodar o projeto localmente
 
 Siga os passos abaixo para testar o projeto na sua máquina:
